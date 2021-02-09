@@ -1,0 +1,119 @@
+﻿<section>
+    VmInclude:__COMPONENT__/g/grid.01.html
+</section>
+<script>
+    function F__ID(){
+        //-------------------------------------
+        //VmInclude:__COMPONENT__/g/grid.01.js
+        //VmInclude:__CURRENT_PATH__data.html.lab_manager_approval.js
+        //VmInclude:__CURRENT_PATH__data.html.supervisor_approval.js
+        //VmInclude:__CURRENT_PATH__data.html.financial_approval.js
+        //VmInclude:__CURRENT_PATH__data.html.received_confirm.js
+        //VmInclude:__CURRENT_PATH__print-formatted-string.js
+        //VmInclude:__CURRENT_PATH__print-form.js
+        //-------------------------------------
+        var fields="Requestor_Name,Supplier_Name,Quotation,Total_Amount,Status";
+        m.fields="_Form,_Print_Version,_PDF,_Request_ID,"+fields+",Submit_date,Submitted_by,_Lab_Manager_Approval,_Supervisor_Approval,_Financial_Approval,_Received,_Delete";
+        //-------------------------------------
+        m.cell_render=function(records,I,field,td){
+            switch(field){
+                case '_Request_ID':
+                    td.html(records[I].UID);
+                    break;
+                case '_Print_Version':
+                    td.html("<u style='cursor:pointer'>Print Version</u>");
+                    td.find('u').on('click',function(){
+                        m.print_html(records[I]);
+                    });
+                    break;
+                case '_PDF':
+                    td.html("<u style='cursor:pointer'>PDF</u>");
+                    td.find('u').on('click',function(){
+                        m.print_pdf(records[I],'order.pdf');
+                        //m.b64Str_pdf(records[I])
+                    });
+                    break;
+                case 'Total_Amount':
+                    td.html("$"+parseFloat(records[I].Data[field]).toFixed(2));
+                    td.css('text-align','right')
+                    break;
+                case 'Quotation':
+                    if(records[I].Data[field] !=undefined) m.set_file_link_s0(records,I,field,td);
+                    break;
+                case "_Delete":
+                    if(records[I].Data.Status=='Submit') td.html('');
+                    break;
+                case '_Lab_Manager_Approval':
+                    if(records[I].Data.Status=='Submit'){
+                        td.html("<u style='cursor:pointer'>Approving</u>");
+                        td.find('u').on('click',function(){
+                            $vm.show_module(m.lab_manager_approval_module,{UID:records[I].UID,A:records[I].A,goback:1,parent:records[I]})
+                        });
+                    }
+                    break;
+                case '_Supervisor_Approval':
+                    if(records[I].Data.Status=='Submit' ){
+                        td.html("<u style='cursor:pointer'>Approving</u>");
+                        td.find('u').on('click',function(){
+                            $vm.show_module(m.supervisor_approval_module,{UID:records[I].UID,A:records[I].A,goback:1,parent:records[I]})
+                        });
+                    }
+                    break;
+                case '_Financial_Approval':
+                    if(records[I].Data.Status=='Submit' && parseFloat(records[I].Data.Total_Amount)>3000){
+                        td.html("<u style='cursor:pointer'>Approving</u>");
+                        td.find('u').on('click',function(){
+                            $vm.show_module(m.financial_approval_module,{UID:records[I].UID,A:records[I].A,goback:1,parent:records[I]})
+                        });
+                    }
+                    break;
+                case '_Received':
+                    td.html("<u style='cursor:pointer'>Notes</u>");
+                    td.find('u').on('click',function(){
+                        $vm.show_module(m.receive_module,{self:m.self,UID:records[I].UID,A:records[I].A,goback:1,parent:records[I]})
+                    });
+                    break;
+            }
+        }
+        //-------------------------------------
+        m.load=function(){
+            if(m.self==1){
+                m.options={self:1};
+                $('#import__ID').hide();
+                $('#export__ID').hide();
+            }
+            else{
+                $('#import__ID').show();
+                $('#export__ID').show();
+            }
+        }
+        //-------------------------------------
+        m.before_submit=function(data,index){
+            if(m.input==undefined){
+                index.A=$vm.user_name; 
+            }
+            return true;
+        }
+        //-------------------------------------
+        m.data_process=function(){
+            var options={};
+            if(m.self==1) options={self:1};
+            var uid_array=[];
+            for(var i=0;i<m.records.length;i++){
+                uid_array.push(m.records[i].UID)
+            }
+            var query={ I2: { $in: uid_array } }
+            load_lab_manager_approval(query,options);
+            load_supervisor_approval(query,options);
+            load_financial_approval(query,options);
+            load_received_confirm(query,options);
+        }
+        //-------------------------------------
+    }
+</script>
+<style>
+    #nav__ID a{
+        text-decoration-line: underline;
+    }
+    VmInclude:__COMPONENT__/g/grid.01.css
+</style>

@@ -1,0 +1,107 @@
+<div id=D__ID>
+    <script type="text/javascript" src="https://gitzip.vmiis.com/js/FileSaver.min.js"></script>
+    <script type="text/javascript" src="https://gitzip.vmiis.com/js/jszip.min.js"></script>
+    <script type="text/javascript" src="https://gitzip.vmiis.com/js/API.js"></script>
+	<div id=page1__ID>
+        <div style='text-align: center;position:absolute;bottom:10px;width:100%;'>
+            <div id=scroll_down__ID>
+                <i class="fas fa-angle-double-down"></i>
+                <br>Scroll
+            </div>
+        </div>
+    </div>
+
+	<div id=page2__ID style='background-color:#fff;padding:50px'>
+        <span style='margin-left:150px'>
+            <u id="btn-play" style='cursor:pointer'>Play</u>
+            <u id="btn-pause"style='cursor:pointer'>Pause</u>
+            <u id="btn-stop" style='cursor:pointer'>Stop</u>
+        </span>
+        <div id="score"></div>
+    </div>
+    <script>
+        function F__ID(){
+            //-----------------------------------
+            var url="__CURRENT_PATH__score.musicxml";
+            const osmd = new opensheetmusicdisplay.OpenSheetMusicDisplay(document.getElementById("score"));
+            //osmd.setOptions({followCursor:true});
+            const audioPlayer = new OsmdAudioPlayer();
+            async function music(scoreXml){
+                await osmd.load(scoreXml);
+                await osmd.render();
+                await audioPlayer.loadScore(osmd);
+                document.getElementById("btn-play").addEventListener("click", () => {
+                    audioPlayer.stop();audioPlayer.play();
+                });
+                document.getElementById("btn-pause").addEventListener("click", () => {
+                    audioPlayer.pause();
+                });
+                document.getElementById("btn-stop").addEventListener("click", () => {
+                    audioPlayer.stop();
+                });
+            };
+            $.get(url,function(scoreXml){
+                music(scoreXml);
+            },'text');
+            //-----------------------------------
+            var a=window.location.href.replace('?/','').split('/'); a.pop();
+            var n=a.pop();
+            var t=n.replace(/-/g,' ');
+            t=t.charAt(0).toUpperCase() + t.slice(1);
+            $('#title__ID').text(t);
+            $('#app__ID').text(n);
+            
+            var txt="";
+            for(a in $vm.module_list){
+                var f=$vm.module_list[a].url.split('/').pop(0);
+                var d=$vm.module_list[a].description; if(d==undefined) d="";
+                if(a.split('_')[0]!='sys') txt+="<li><b>"+f+"</b> "+d+"</li>";
+            }
+            $('#list__ID').html(txt);
+            $('#g__ID').on('click',function(){ 
+                if($('#steps__ID').css('display')=='none') $('#steps__ID').show();
+                else $('#steps__ID').hide();
+            })
+            $('#d__ID').on('click',function(){
+                GitZip.zipRepo('https://github.com/vmiis/mockup/tree/main/'+n);
+            })
+
+            $('#page1__ID').css('min-height',$vm.min_height+"px");
+            $('#page2__ID').css('min-height',$vm.min_height+"px");
+            $('#scroll_down__ID').on('click',function(e){
+                e.preventDefault();
+                $('html, body').animate({ scrollTop: $('#page2__ID').offset().top-60}, 800, 'linear');
+            })
+        }
+    </script>
+    <style>
+        #D__ID{
+            padding:0px;
+			height:100%;
+			animation: vm_module_fadein 1.0s;
+        }
+        #steps__ID{
+            display: inline-block;
+            background-color: white;
+            padding: 10px;
+            font-size: 14px;
+        }
+        #scroll_down__ID {
+            display:inline-block;
+            padding:10px 20px;
+            cursor:pointer;
+            color:#fff;
+            font-size:150%;
+			animation:scroll__ID 8s;
+			-moz-animation:scroll__ID 8s infinite; /* Firefox */
+			-webkit-animation:scroll__ID 8s infinite; /* Safari and Chrome */
+		}  
+        @keyframes scroll__ID 
+		{
+			0%   {color:#fff;}
+			50%  {color:#333;}
+			100%   {color:#fff;}
+		}
+    </style>
+</div>
+

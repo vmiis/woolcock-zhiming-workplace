@@ -1,0 +1,78 @@
+﻿<div id=D__ID>
+    <section id=form_container__ID>
+    	<div id=header__ID>
+    		Received
+    	</div>
+    	<form id=F__ID>
+    		<div>
+    			<div w=100>
+					<span>Notes</span>
+					<textarea name=Notes style='height:200px'></textarea>
+					<br><span id=name__ID></span>
+				</div>
+			</div>
+    		<div>
+				<div w=100>
+					<button id=submit__ID >Submit</button>
+				</div>
+    		</div>
+    	</form>
+    </section>
+	VmInclude:__COMPONENT__/m/model.01.html
+    <script>
+    	function F__ID(){
+    		//-------------------------------------
+			//VmInclude:__COMPONENT__/f/form.01.js
+			//VmInclude:__CURRENT_PATH__../order/print-formatted-string.js
+			//VmInclude:__CURRENT_PATH__print-formatted-string.js
+            //VmInclude:__CURRENT_PATH__send-email.js
+			new ResizeObserver($vm.responsive).observe(form_container__ID);
+    		//-------------------------------------
+			var old_m_load=m.load;
+			m.load=function(){
+				$('#name__ID').text('');
+				old_m_load();
+				if(m.input!=undefined && m.input.readonly==1){
+					$('#submit__ID').hide();
+				}
+				if(m.input!=undefined && m.input.record!=undefined){
+					var nm=m.input.record.Submit_name;
+					if(nm==undefined) nm=m.input.record.Submitted_by;
+					$('#name__ID').text("Submitted by "+nm);
+				}
+			}      
+    		//-------------------------------------
+            m.before_submit=function(data,index){
+				$vm["_sys_refresh_"+m.parent_table]=1; 		//force parent module to refresh
+				if(m.input!=undefined){
+					index.A=m.input.A; 						//parent A -> A, transfer self permission
+					index.I2=m.input.UID; 
+				}
+                return true;
+            }
+    		//-------------------------------------
+			m.after_insert=function(data,res){
+				var a_record={Data:data,Submit_name:$vm.displayname,Submit_by:$vm.user_name,Submit_date:res.nr.Submit_date,}
+				var new_data=m.input.parent;
+				var done=function(){
+					var ret=0,rid=undefined; if(m.input!=undefined && m.input.record!=undefined) rid=m.input.record._id;
+					if(m.input.goback!=undefined || rid!=undefined ) ret=1;	
+					$vm.refresh=1;
+					m.change_status++;
+					if(ret==1) window.history.go(-1);            					//from grid
+					else $vm.alert('Your data has been successfully submitted');    //standalone
+				}
+				var url=$vm.emails['reception_to_finance_and_requestor'];
+				m.send_email(new_data,a_record,url,function(code){ done();})
+			}
+			//-------------------------------------
+    	}
+    </script>
+    <style>
+        #form_container__ID{
+            max-width:800px;
+        }
+		VmInclude:__CURRENT_PATH__form.css
+        VmInclude:__COMPONENT__/f/form.01.css
+    </style>
+</div>

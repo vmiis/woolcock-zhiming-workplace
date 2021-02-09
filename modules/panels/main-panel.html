@@ -1,0 +1,127 @@
+<div id=D__ID>
+    <div id=panel__ID>
+        <div>
+            <span class=LT__ID>Operations</span>
+            <li><a href='?/printers'>Printers</a></li>
+            <li><a target=_blank href='https://woolcock-imr.github.io/lab/'>Lab anagement</a></li>
+            <li><a target=_blank href='https://woolcock-imr.github.io/hr/'>HR</a></li>
+            <li><a target=_blank href='https://woolcock-imr.github.io/volunteers/'>Volunteers (data from Dynamics 365)</a></li>
+        </div>
+        <div>
+            <span class=LT__ID>Active Research Projects</span>
+            <li><a target=_blank href='https://cansleep.rt.org.au/'>Cansleep</a></li>
+            <li><a target=_blank href='https://cansleep.rt.org.au/oq.html'>Cansleep online questionnaire</a></li>
+            <li><a target=_blank href='https://windfarm-home-study-2019.rt.org.au'>Windfarm home study</a></li>
+            <li><a target=_blank href='https://windfarm-home-study-2019.rt.org.au/oq.html'>Windfarm home study online questionnaire</a></li>
+            
+            <li><a target=_blank href='https://windfarm-lab-management.rt.org.au/'>Windfarm lab study</a></li>
+            <li><a target=_blank href='https://flat.rt.org.au'>Flat</a></li>
+            <li><a target=_blank href='https://flat.rt.org.au/online-questionnaire.html'>Flat online questionnaire</a></li>
+            <li><a target=_blank href='https://biomarkers-ii.rt.org.au/'>Biomarkers-II</a></li>
+            <li><a target=_blank href='https://biomarkers-ii-online-questionnaire.rt.org.au/'>Biomarkers-II online questionnaire</a></li>
+            
+        </div>
+        <div>
+            <span class=LT__ID>Archived Research Projects</span>
+            <li><a target=_blank href='https://rt.woolcock.org.au/CRC-Stream-B.html'>CRC Stream B</a></li>
+            <li><a target=_blank href='https://rt.woolcock.org.au/Insomnia-CRC-RT.html'>Insomnia CRC RT</a></li>
+            <li><a target=_blank href='https://rt.woolcock.org.au/somna.html'>CRC Stream C Recruitment</a></li>
+            <li><a target=_blank href='https://nightstudy.rt.org.au/'>Nightstudy</a></li>
+            <li><a target=_blank href='https://rt.woolcock.org.au/amazes.html'>AMAZES</a></li>
+        </div>
+        <div>
+            <span class=LT__ID>Links</span>
+            <li><a target=_blank href='https://woolcock.org.au'>Internet</a></li>
+            <li><a target=_blank href='https://intranet.woolcock.org.au'>Intranet</a></li>
+            <li><a target=_blank href='https://www.coreplus.com.au/'>Coreplus</a></li>
+            <li><a target=_blank href='https://home.dynamics.com/'>Dynamics 365</a></li>
+            <li><a target=_blank href='https://www.researchvolunteer.org.au/'>Volunteer Portal</a></li>
+            <li><a target=_blank href='https://connx.cloud.micropay.com.au/connx50294/frmLogin.aspx'>ConnX</a></li>
+            <li><a target=_blank href='https://sydneyuni.service-now.com/'>Uni Services</a></li>
+            
+        </div>
+
+
+    </div>
+    <script>
+        function F__ID(){
+            //--------------------------------------------------------
+            var prefix=$vm.module_list["__MODULE__"].prefix;
+            if(prefix==undefined) prefix="";
+            //--------------------------------------------------------
+            $('#panel__ID a').on('click',function(e){
+                e.preventDefault();
+                var module_name=$(this).attr('href').replace('?\/','');
+                if(module_name.substring(0,4)=='http') window.open(module_name);
+                else if(module_name!="") $vm.show_module(module_name,{})
+            })
+            //--------------------------------------------------------
+        }
+    </script>
+    <style>
+        #D__ID{
+            background-color:#fff;
+            height:100%;
+            overflow: auto;
+            animation: vm_module_fadein 1.0s;
+        }
+        #panel__ID{
+            margin:0 auto;
+            /*max-width:1400px;*/
+            font-size:14px;
+            padding:50px 80px 10px 80px;
+            font-size:14px;
+    		column-count: 4;
+    		column-width: 300px;
+    		column-gap: 30px;
+            font-size:14px;
+    	}
+        #panel__ID a{
+            color:#555;
+        }
+        #panel__ID a:hover{
+            color:red;
+        }
+        .h_img__ID{
+            margin:0 auto;
+            max-width:1400px;          
+            height:200px;
+            background-size: cover; background-position: top center; 
+            background-image: url(https://images.unsplash.com/photo-1583530296659-251ebd16d4ac?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80);
+            padding-top:60px;
+            margin-top:50px;
+            margin-bottom:50px;
+            border-radius: 5px;
+        }
+        .h_txt__ID{
+            color:#fff;
+            background-color: rgba(50,90,90,0.5) !important;
+            _width: 35%;
+            display:inline-block;
+            margin: 0% 0% 0% 6%!important;
+            padding:20px;
+            border-radius: 10px;
+			text-shadow: 2px 2px 2px #000;
+        }
+        .LT__ID{
+			color:#283f55;
+			font-weight: bold;
+            display:inline-block;
+            margin-top:10px;
+            margin-left:-15px;
+            margin-bottom:10px;
+            border-bottom: 2px solid #479824;
+            font-size: 18px;
+        }
+        #panel__ID div{
+            break-inside: avoid;
+        }
+        @media screen and (max-width: 1000px) {
+            .h_img__ID{
+                margin-top:0px;
+                border-radius: 0px;
+            }
+        }
+    </style>
+</div>
+

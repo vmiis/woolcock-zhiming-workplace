@@ -1,0 +1,178 @@
+﻿<div id=D__ID>
+    <section id=form_container__ID bp=576 style='display:flow-root;'>
+    	<div id=header__ID>
+    		Communal ordering form
+    	</div>
+    	<form id=F__ID>
+			<div id=F_1__ID>
+				<div>
+					<div w='100|50'>
+						<span>Full name of the requestor</span>
+						<input type="text" name=Requestor_Name required />
+					</div>
+					<div w='100|50'>
+						<span>Email of the requestor</span>
+						<input type="email" name=Requestor_Email required />
+					</div>
+				</div>
+				<div>
+					<div w='100|50'>
+						<span>Supplier Name</span>
+						<select name=Supplier_Name id=supplier__ID></select>
+					</div>
+					<div w='100|50'>
+						<span>Supplier Email</span>
+						<input type=email name=Supplier_Email />
+					</div>
+					<div w='100|50'>
+						<span>Supplier Phone</span>
+						<input type=text name=Supplier_Phone />
+					</div>
+					<div w='100|50'>
+						<span>Supplier Fax</span>
+						<input type=text name=Supplier_Fax />
+					</div>
+					<div w='100|50'>
+						<span>Supplier Account_Number</span>
+						<input type=text name=Supplier_Account_Number />
+					</div>
+					<div w='100|50'>
+						<span>Supplier Address</span>
+						<textarea name=Supplier_Address style='min-height:120px'></textarea>
+					</div>
+				</div>
+				<div>
+					<div w='100|50'>
+						<span>Supervisor Name</span>
+						<select name=Supervisor_Name id=supervisor__ID></select>
+					</div>
+					<div w='100|50'>
+						<span>Supervisor Email</span>
+						<input type=email name=Supervisor_Email />
+					</div>
+					<div w='100|50'>
+						<span>Group</span>
+						<input type=text name=Supervisor_Group />
+					</div>
+					<div w='100|50'>
+						<span>Project Code</span>
+						<input type=text name=Project_Code />
+					</div>
+				</div>
+				<div>
+					<div w='100|100'>
+						<span>Deliver Address</span>
+						<textarea name=Deliver_Address style='min-height:120px'></textarea>
+					</div>
+				</div>
+				<div>
+					<div w='100|100'>
+						<span>Quotation File</span>
+						<div class="form-control" style='height: 80px;'>
+                            <u style='cursor:pointer' id=link_Quotation__ID></u>
+                            <br>
+                            <input type="file" name=Quotation style="margin-top:6px" /> <button class=c_print type="button" id=x_Quotation__ID style='margin-left:30px'>Remove</button>
+                        </div>
+    				</div>
+					<div w='100|100'>
+						<span>Quotation Number</span>
+						<input type=text name=Quotation_Number />
+    				</div>
+				</div>
+			</div>
+			<hr style="border-top: 1px solid #888;width: 100%;margin:10px 0">
+			<div>
+				<div w='100|100'>
+					<u class=c_print style='cursor:pointer;margin-bottom:3px;display:inline-block' id=item_a_add__ID><i class="fa fa-plus"></i> Add an item</u>
+					<table id=grid_item_a__ID></table>
+					<div id=total__ID style='text-align: right;padding-top:6px'>
+							Sub Total: <input type=text name=Sub_Total style="width:120px;margin-bottom:1px" readonly><br>
+							Delivery: <input type=text name=Delivery style="width:120px;margin-bottom:1px"><br>
+							10% GST: <input type=text name=GST_Amount style="width:120px;margin-bottom:1px" readonly><br>
+							Grand Amount: <input type=text name=Total_Amount style="width:120px" readonly>
+					</div>
+				</div>
+			</div>
+			<section style='display:none'>
+				<input type="text" name=Status  />
+			</section>
+			<div>
+				<div w='100|100' class=c_print>
+					<button id=draft__ID type="button" class="btn btn-secondary">Save and Return Later</button>
+					<button id=submit__ID type="button" class="btn btn-secondary">Submit</button>
+    				<!--<button id=pdf1__ID type="button" class="btn btn-secondary">PDF</button>-->
+					<div style='display:none'><button id=trigger__ID></button></div>
+				</div>
+			</div>
+    	</form>
+	</section>
+	VmInclude:__COMPONENT__/m/model.01.html
+    <script>
+    	function F__ID(){
+    		//-------------------------------------
+			//VmInclude:__COMPONENT__/f/form.01.js
+            //VmInclude:__COMPONENT__/f/form-item-a.01.js
+            //VmInclude:__CURRENT_PATH__form.html.drop_down_list.js
+            //VmInclude:__CURRENT_PATH__form.html.item_a_list.js
+			//VmInclude:__CURRENT_PATH__print-formatted-string.js
+            //VmInclude:__CURRENT_PATH__print-form.js
+            //VmInclude:__CURRENT_PATH__send-email.js
+			new ResizeObserver($vm.responsive).observe(form_container__ID);
+			m.storage_type='s0';
+			item_a_list();
+			//-------------------------------------
+			var old_m_load=m.load;
+			m.load=function(){
+				if( $('#supplier__ID').html()=='' || $('#supervisor__ID').html()=='' ){
+					drop_down_list();
+				}
+				old_m_load();
+				if(m.input.record!=undefined && m.input.record.Data.Status=="Submit"){
+					$('#draft__ID').hide();
+					$('#submit__ID').hide();
+				}
+                m.set_file_link_s0("Quotation");
+				item_a_render();
+			}      
+			//-------------------------------------
+			$('#draft__ID').on('click',function(){	$("#F__ID input[name='Status']").val('Draft');  m.options.lock=0; $('#trigger__ID').trigger( "click" ); })
+			$('#submit__ID').on('click',function(){	$("#F__ID input[name='Status']").val('Submit'); m.options.lock=1; $('#trigger__ID').trigger( "click" ); })
+			//-------------------------------------
+            m.before_submit=function(data,index){
+				if(m.input.record==undefined){ 	index.A=$vm.user_name; 	} //only for add
+				data.items=m.item_a_get_data();
+                return true;
+            }
+			//-------------------------------------
+			m.after_insert=function(data,res){ after_submit(data,res,res.nr.UID,res.nr.Submit_date); }
+			m.after_update=function(data,res){ after_submit(data,res,res.result.UID,res.result.Submit_date); }
+			var after_submit=function(data,res,UID,s_date){
+				var new_data={Data:data,UID:UID,Submit_date:s_date};
+				var done=function(){
+					var ret=0,rid=undefined; if(m.input!=undefined && m.input.record!=undefined) rid=m.input.record._id;
+					if(m.input.goback!=undefined || rid!=undefined ) ret=1;	
+					$vm.refresh=1;
+					m.change_status++;
+					if(ret==1) window.history.go(-1);            					//from grid
+					else $vm.alert('Your data has been successfully submitted');    //standalone
+				}
+				//if(data.Status=='Draft'){
+				if(data.Status=='Submit' || data.Status=='Draft'){
+					var url=$vm.emails['requestor_to_lab_manager'];
+					m.send_email(new_data,url,function(code){ done();})
+				}
+				else done();
+				
+			}
+			//-------------------------------------
+		}
+	</script>
+    <style>
+        #form_container__ID{
+            max-width:1000px;
+        }
+		/*VmInclude:__CURRENT_PATH__form.css*/
+        /*VmInclude:__COMPONENT__/f/form-item-a.01.css*/
+		/*VmInclude:__COMPONENT__/f/form.01.css*/
+    </style>
+</div>
