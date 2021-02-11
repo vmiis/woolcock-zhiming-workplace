@@ -29,7 +29,7 @@
         <!----------------------------------------------->
         <script app code>
             //---------------------------------------------
-            $VmAPI={};$vm.ver=[0.08,0.01]; $vm['jquery-ui-min-js']=1;
+            $VmAPI={};$vm.ver=[0.09,0.01]; $vm['jquery-ui-min-js']=1;
             $vm.flexindex=new FlexSearch({  doc: {id: "id",field: ["title","contents"]}    });
             $vm.hosting_path=window.location.href.substring(0, window.location.href.split('?')[0].lastIndexOf('/'));
             //---------------------------------------------
@@ -49,7 +49,6 @@
             //=================================================
             //VM framework code, do not need to chang the following code in most cases
             $vm.min_height=$(window).height()-60;
-            console.log('1-'+$vm.min_height)
             $('#content').css('min-height',$vm.min_height);
             $('#content').css('padding-top',60);
             $vm.root_layout_content_slot='content'
