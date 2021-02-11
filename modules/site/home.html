@@ -66,6 +66,7 @@
                 GitZip.zipRepo('https://github.com/vmiis/mockup/tree/main/'+n);
             })
 
+            console.log('2-'+$vm.min_height)
             $('#page1__ID').css('min-height',$vm.min_height+"px");
             $('#page2__ID').css('min-height',$vm.min_height+"px");
             $('#scroll_down__ID').on('click',function(e){

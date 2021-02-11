@@ -29,7 +29,7 @@
         <!----------------------------------------------->
         <script app code>
             //---------------------------------------------
-            $VmAPI={};$vm.ver=[0.07,0.01]; $vm['jquery-ui-min-js']=1;
+            $VmAPI={};$vm.ver=[0.08,0.01]; $vm['jquery-ui-min-js']=1;
             $vm.flexindex=new FlexSearch({  doc: {id: "id",field: ["title","contents"]}    });
             $vm.hosting_path=window.location.href.substring(0, window.location.href.split('?')[0].lastIndexOf('/'));
             //---------------------------------------------
@@ -48,6 +48,10 @@
         <script vm framework code>
             //=================================================
             //VM framework code, do not need to chang the following code in most cases
+            $vm.min_height=$(window).height()-60;
+            console.log('1-'+$vm.min_height)
+            $('#content').css('min-height',$vm.min_height);
+            $('#content').css('padding-top',60);
             $vm.root_layout_content_slot='content'
             $vm.api_address='https://woolcock-zhiming-database.vmiis.com';
             if(window.location.hostname=='127.0.0.1' || window.location.hostname=='localhost'){ 
@@ -179,9 +183,6 @@
             $("body").addClass('body_background_default');
             $vm.boot(); //start from here
             //=================================================
-            $vm.min_height=$(window).height()-60;
-            $('#content').css('min-height',$vm.min_height);
-            $('#content').css('padding-top',60);
             $(window).on('scroll', function() {
             if($vm.active_name=='home'){
                 var y=-$(window).scrollTop()/3;
