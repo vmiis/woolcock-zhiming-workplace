@@ -1,0 +1,111 @@
+<div id=D__ID>
+    <div class=h_img__ID>
+        <div class=h_txt__ID><h4>Laboratory Order Management</h4></div>
+    </div>
+    <div id=panel__ID>
+        <div>
+            <span class=LT__ID>Lab Ordering</span>
+            <li><a href='lab-order-form-self'>Request Form</a></li>
+            <li><a href='lab-order-data-self'>My Ordering <span id=T3__ID></span></a></li>
+            <li><a href='lab-order-data'>Management <span id=T4__ID></span></a></li>
+            <li><a href='lab-order-diagram'>Diagram</a></li>
+        </div>
+        <div>
+            <span class=LT__ID>Administrator</span>
+            <li><a href='lab-order-company-data'>Supplier</a></li>
+            <li><a href='lab-order-supervisor-data'>Supervisor</a></li>
+        </div>
+    </div>
+    <script>
+        function F__ID(){
+            //--------------------------------------------------------
+            var prefix=$vm.module_list["__MODULE__"].prefix;
+            if(prefix==undefined) prefix="";
+            //--------------------------------------------------------
+            $('#panel__ID a').on('click',function(e){
+                e.preventDefault();
+                var module_name=$(this).attr('href').replace('?\/','');
+                if(module_name!="") $vm.show_module(module_name,{})
+            })
+            //--------------------------------------------------------
+            $('#panel__ID a').each(function(){
+                var href=$(this).attr('href');
+                $(this).attr('href','?/'+prefix+href);
+                if(href!=undefined){
+                    if($vm.module_list[prefix+href]!=undefined){
+                        var url=$vm.module_list[prefix+href].url;
+                        $(this).attr('title',url);
+                    }
+                }
+            })
+            //--------------------------------------------------------
+        }
+    </script>
+    <style>
+        #D__ID{
+            background-color:#fff;
+            height:100%;
+            overflow: auto;
+            animation: vm_module_fadein 1.0s;
+        }
+        #panel__ID{
+            margin:0 auto;
+            max-width:1400px;
+    		padding:10px 0 0 20px;
+            font-size:14px;
+            padding:0px 50px 10px 50px;
+            font-size:14px;
+    		column-count: 4;
+    		column-width: 300px;
+    		column-gap: 30px;
+            font-size:14px;
+    	}
+        #panel__ID a{
+            color:#555;
+        }
+        #panel__ID a:hover{
+            color:red;
+        }
+        .h_img__ID{
+            margin:0 auto;
+            max-width:1400px;          
+            height:200px;
+            background-size: cover; background-position: top center; 
+            background-image: url(https://images.unsplash.com/photo-1575503802870-45de6a6217c8?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80);
+            padding-top:60px;
+            margin-top:50px;
+            margin-bottom:50px;
+            border-radius: 5px;
+        }
+        .h_txt__ID{
+            color:#fff;
+            background-color: rgba(50,90,90,0.5) !important;
+            _width: 35%;
+            display:inline-block;
+            margin: 0% 0% 0% 6%!important;
+            padding:20px;
+            border-radius: 10px;
+			text-shadow: 2px 2px 2px #000;
+        }
+        .LT__ID{
+			color:#283f55;
+			font-weight: bold;
+            display:inline-block;
+            margin-top:10px;
+            margin-left:-15px;
+            margin-bottom:10px;
+            border-bottom: 2px solid #479824;
+            font-size: 18px;
+        }
+        #panel__ID div{
+            break-inside: avoid;
+        }
+        @media screen and (max-width: 1000px) {
+            .h_img__ID{
+                margin-top:0px;
+                border-radius: 0px;
+            }
+        }
+    </style>
+</div>
+

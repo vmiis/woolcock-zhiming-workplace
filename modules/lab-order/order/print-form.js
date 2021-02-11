@@ -1,9 +1,9 @@
 ﻿//-----------------------------------------
 m.get_pdf=function(txt,callback){
-    $('#_g_container').html(txt);
-    var CH=document.getElementById('_g_container').clientHeight;
-    var CW=document.getElementById('_g_container').clientWidth;
-    html2canvas(document.querySelector('#_g_container')).then(function(canvas){
+    $('#_g_vm_canvas').html(txt);
+    var CH=document.getElementById('_g_vm_canvas').clientHeight;
+    var CW=document.getElementById('_g_vm_canvas').clientWidth;
+    html2canvas(document.querySelector('#_g_vm_canvas')).then(function(canvas){
         var pdf = new jsPDF('p', 'mm', 'a4');
         var mH=10,mW=8;
         var W=210;
@@ -49,10 +49,10 @@ m.b64Str_pdf=function(record,callback){
 }
 //-----------------------------------------
     /*
-    $('#_g_container').html(txt);
-    var CH=document.getElementById('_g_container').clientHeight;
-    var CW=document.getElementById('_g_container').clientWidth;
-    html2canvas(document.querySelector('#_g_container')).then(function(canvas){
+    $('#_g_vm_canvas').html(txt);
+    var CH=document.getElementById('_g_vm_canvas').clientHeight;
+    var CW=document.getElementById('_g_vm_canvas').clientWidth;
+    html2canvas(document.querySelector('#_g_vm_canvas')).then(function(canvas){
         var pdf = new jsPDF('p', 'mm', 'a4');
         var mH=10,mW=8;
         var W=210;
@@ -77,10 +77,10 @@ m.b64Str_pdf=function(record,callback){
     })
     */   
     /*
-    $('#_g_container').html(txt);
-    var CH=document.getElementById('_g_container').clientHeight;
-    var CW=document.getElementById('_g_container').clientWidth;
-    html2canvas(document.querySelector('#_g_container')).then(function(canvas){
+    $('#_g_vm_canvas').html(txt);
+    var CH=document.getElementById('_g_vm_canvas').clientHeight;
+    var CW=document.getElementById('_g_vm_canvas').clientWidth;
+    html2canvas(document.querySelector('#_g_vm_canvas')).then(function(canvas){
         var pdf = new jsPDF('p', 'mm', 'a4');
         var mH=10,mW=8;
         var W=210;

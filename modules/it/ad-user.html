@@ -1,0 +1,132 @@
+<div id=D__ID>
+    <section>
+        <div id=toolbar__ID class="navbar navbar-default">
+            <form class="form-inline">
+                <input id=keyword__ID type="text" placeholder="find users" class="form-control" style='width:150px'>
+                <button id=query__ID type=button class="btn btn-secondary" title='refresh'><i class="fa fa-search" ></i></button>
+            </form>
+            <span id=elapsed__ID style='float:right'></span>
+        </div>
+        <div>
+            <pre id="json_renderer__ID"></pre>
+        </div>
+        </section>
+    <style>
+        #toolbar__ID{
+            background-color:#ccc;
+            padding:5px 10px;
+            margin-bottom:0px;
+            overflow:hidden
+        }
+        #toolbar__ID *{
+            margin-right:3px;
+        }
+        #keyword__ID{
+            width: 150px; 
+            display:inline-block;
+        }
+        @media screen and (max-width:768px){
+            #toolbar__ID{
+                padding: 3px 0;
+            }
+            #toolbar__ID div{
+                padding-left:3px;
+            }
+            #keyword__ID{
+                width:auto;
+            }
+        }
+    </style>
+    <script>
+        function F__ID(){
+            $('#query__ID').on('click',function(){
+                $vm.request({cmd:'ad-user',search:$('#keyword__ID').val()},function(res){
+                    var data={};
+                    for(var i=0;i<res.records.users.length;i++){
+                        var name=res.records.users[i].cn;
+                        var g={};
+                        for(var j=0;j<res.records.users[i].groups.length;j++){
+                            var gnm=res.records.users[i].groups[j].cn;
+                            g[gnm]=res.records.users[i].groups[j];
+                        }
+                        data[name]=res.records.users[i];
+                        data[name].groups=g;
+                    }
+                    if(res.status=='np'){
+                        data={"info":"You do not have permissions"}
+                    }
+                    var options = {
+                        collapsed: true,
+                        rootCollapsable: false,
+                    };
+                    $('#json_renderer__ID').jsonViewer(data, options);
+                })
+            })
+        }
+    </script>
+    <style>
+        #D__ID{
+            height:100%;
+            color:#fff;
+            background-color:#fff;
+        }
+
+        /* Root element */
+        #D__ID .json-document {
+            padding: 1em 2em;
+        }
+
+        /* Syntax highlighting for JSON objects */
+        #D__ID ul.json-dict, #D__ID ol.json-array {
+            list-style-type: none;
+            margin: 0 0 0 1px;
+            border-left: 1px dotted #ccc;
+            padding-left: 2em;
+        }
+        #D__ID .json-string {
+            color: #0B7500;
+        }
+        #D__ID .json-literal {
+            color: #1A01CC;
+            font-weight: bold;
+        }
+
+        /* Toggle button */
+        #D__ID a.json-toggle {
+            position: relative;
+            color: inherit;
+            text-decoration: none;
+        }
+        #D__ID a.json-toggle:focus {
+            outline: none;
+        }
+        #D__ID a.json-toggle:before {
+            font-size: 1.1em;
+            color: #c0c0c0;
+            content: "\25BC"; /* down arrow */
+            position: absolute;
+            display: inline-block;
+            width: 1em;
+            text-align: center;
+            line-height: 1em;
+            left: -1.2em;
+        }
+        #D__ID a.json-toggle:hover:before {
+            color: #aaa;
+        }
+        #D__ID a.json-toggle.collapsed:before {
+            /* Use rotated down arrow, prevents right arrow appearing smaller than down arrow in some browsers */
+            transform: rotate(-90deg);
+        }
+
+        /* Collapsable placeholder links */
+        #D__ID a.json-placeholder {
+            color: #aaa;
+            padding: 0 1em;
+            text-decoration: none;
+        }
+        #D__ID a.json-placeholder:hover {
+            text-decoration: underline;
+        }
+    </style>
+</div>

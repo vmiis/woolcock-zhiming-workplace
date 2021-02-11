@@ -1,0 +1,32 @@
+<div id=D__ID>
+    <section id=form_container__ID>
+    </section>
+    <div>
+        <pre id="json_renderer__ID"></pre>
+    </div>
+
+    <script>
+    	function F__ID(){
+    		//-------------------------------------
+			VmInclude:__COMPONENT__/f/form.01.js
+			//-------------------------------------
+            m.load=function(){
+                if(m.input!=undefined){
+                    
+                    var options = {
+                        collapsed: true,
+                        rootCollapsable: false,
+                    };
+                    $('#json_renderer__ID').jsonViewer(m.input.record, options);
+                }
+            }
+            //-------------------------------
+		}
+    </script>
+    <style>
+        #form_container__ID{
+            max-width:800px;
+        }
+        VmInclude:__COMPONENT__/f/form.01.css
+    </style>
+</div>
