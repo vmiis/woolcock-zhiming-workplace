@@ -19,8 +19,8 @@
         "crm-volunteer-data":{url:$vm.hosting_path+"/modules/it/crm-volunteer-data.html",description:"crm-volunteer",form_module:"crm-form",router:1},
         "crm-project-data":{url:$vm.hosting_path+"/modules/it/crm-project-data.html",description:"crm-project",form_module:"crm-form",router:1},
         "crm-study-data":{url:$vm.hosting_path+"/modules/it/crm-study-data.html",description:"crm-study",form_module:"crm-form",router:1},
-        "crm-form":{url:$vm.hosting_path+"/modules/it/crm-form.html",description:"crm-form"},
-        
+        "crm-form":             {url:$vm.hosting_path+"/modules/it/crm-form.html",description:"crm-form"},
+        "temperature-reports":  {url:$vm.hosting_path+"/modules/it/temperature-reports.html",description:"Temperature reports"},
         "printers":{url:$vm.hosting_path+"/modules/operations/printers.html",description:"printers",router:1},
 
         "lab-order-data-self":{

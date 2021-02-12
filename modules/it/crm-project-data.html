@@ -48,6 +48,10 @@
             var skip=limit*parseInt($('#I__ID').text());
             var mt1=new Date().getTime();
             $vm.request({cmd:'crm-project',limit:limit,search:escape($('#keyword__ID').val().trim()),link:m.link},function(res){
+                if(res.status=='np'){
+                    alert("No permissions.");
+                    return;
+                }
                 m.next_link=res.result['@odata.nextLink'];
                 m.links.push(m.link);
                 console.log(res);
