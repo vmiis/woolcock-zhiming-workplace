@@ -16,8 +16,10 @@
         "main-panel":{url:$vm.hosting_path+"/modules/panels/main-panel.html",description:"main panel",router:1},
         "lab-order-panel":{url:$vm.hosting_path+"/modules/panels/lab-order-panel.html",description:"lab order panel",router:1},
         "ad-user":{url:$vm.hosting_path+"/modules/it/ad-user.html",description:"AD User",router:1},
-        "crm-project-data":{url:$vm.hosting_path+"/modules/it/crm-project-data.html",description:"crm-project",form_module:"crm-project-form",router:1},
-        "crm-project-form":{url:$vm.hosting_path+"/modules/it/crm-project-form.html",description:"crm-project"},
+        "crm-volunteer-data":{url:$vm.hosting_path+"/modules/it/crm-volunteer-data.html",description:"crm-volunteer",form_module:"crm-form",router:1},
+        "crm-project-data":{url:$vm.hosting_path+"/modules/it/crm-project-data.html",description:"crm-project",form_module:"crm-form",router:1},
+        "crm-study-data":{url:$vm.hosting_path+"/modules/it/crm-study-data.html",description:"crm-study",form_module:"crm-form",router:1},
+        "crm-form":{url:$vm.hosting_path+"/modules/it/crm-form.html",description:"crm-form"},
         
         "printers":{url:$vm.hosting_path+"/modules/operations/printers.html",description:"printers",router:1},
 

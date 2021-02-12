@@ -7,10 +7,19 @@
         VmInclude:__COMPONENT__/g/grid.01.js
         //-------------------------------------
         var fields=`
-					Name|woolcock_name,
-                    Submit_date|createdon,
+                    CRM ID|woolcock_volunteerid,
+                    Name|fullname,
+                    Age|woolcock_age,
+                    Gender|gendercode,
+                    Email|emailaddress1,
+                    Mobile Phone|mobilephone,
+                    Newsletter|woolcock_newsletter,
+                    Participate Research|woolcock_participateinanyresearchstudy,
                     Submitted_by
-		`;
+        `;
+        /*
+                    Submit_date|createdon,
+        */
         m.fields="_Form,"+fields;
         //-------------------------------------
         $('#new__ID').hide();
@@ -47,7 +56,7 @@
             var limit=parseInt($('#page_size__ID').val());
             var skip=limit*parseInt($('#I__ID').text());
             var mt1=new Date().getTime();
-            $vm.request({cmd:'crm-project',limit:limit,search:escape($('#keyword__ID').val().trim()),link:m.link},function(res){
+            $vm.request({cmd:'crm-volunteer',limit:limit,search:escape($('#keyword__ID').val().trim()),link:m.link},function(res){
                 m.next_link=res.result['@odata.nextLink'];
                 m.links.push(m.link);
                 console.log(res);
@@ -81,6 +90,21 @@
                 m.render();
             });
         };
+        //-------------------------------------
+        m.cell_render=function(records,I,field,td){
+            switch(field){
+                case 'woolcock_newsletter':
+                case 'woolcock_participateinanyresearchstudy':
+                    if(records[I][field]==true) td.html("<i style='color:green;padding-left:10px;cursor:pointer' class='fas fa-check'></i>");
+                    else td.html('');
+                    break;
+                case 'gendercode':
+                    if(records[I][field]==1) td.html("Male");
+                    if(records[I][field]==2) td.html("Female");
+                    if(records[I][field]==3) td.html("Other");
+                    break;
+            }
+        }
         //-------------------------------------
 
 
