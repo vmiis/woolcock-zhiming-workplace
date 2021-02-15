@@ -14,6 +14,7 @@
     var $H=$vm.hosting_path+"/modules";
     var modules={
         "main-panel":{url:$vm.hosting_path+"/modules/panels/main-panel.html",description:"main panel",router:1},
+        "diagram":                                  {url:$H+"/diagram/diagram.html",router:1},
         "lab-order-panel":{url:$vm.hosting_path+"/modules/panels/lab-order-panel.html",description:"lab order panel",router:1},
         "ad-user":{url:$vm.hosting_path+"/modules/it/ad-user.html",description:"AD User",router:1},
         "crm-volunteer-data":{url:$vm.hosting_path+"/modules/it/crm-volunteer-data.html",description:"crm-volunteer",form_module:"crm-form",router:1},
