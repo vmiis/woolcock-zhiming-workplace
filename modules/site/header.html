@@ -182,14 +182,16 @@
                 })
             }
             //------------------------------------
-            try{
-                var xhr = new XMLHttpRequest();
-                xhr.open("GET",$vm.api_address,false);
-                xhr.send(null);
-            }
-            catch(e){
-                alert("My computer (hosting database) is not online or your computer is not connected to the Uni Network, so you can not access some pretected data.");
-            }
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                } 
+                else if ( xhr.readyState == 4 && xhr.status != 200 ){
+                    alert("My computer (hosting database) is not online or your computer is not connected to the Uni Network, so you can not access some pretected data.");
+                }
+            };
+            xhr.open("GET",$vm.api_address,true);
+            xhr.send(null);
             //------------------------------------
         }
     </script>
