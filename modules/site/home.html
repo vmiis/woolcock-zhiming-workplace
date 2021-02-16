@@ -22,7 +22,7 @@
     <div id=page2__ID style='background-color:#fff;padding:50px'>
         <span>Sitting is the new smoking. Don't sit too long. Keep walking and relaxing in every hour. </span>&nbsp;&nbsp;&nbsp;
         <u style='cursor:pointer' title='click here to reset'><span id=time__ID>Time</span></u>&nbsp;&nbsp;&nbsp;
-        <u style='cursor:pointer' title='click here to reset' id=sound__ID>Alarm: <i class="fas fa-volume-mute" id=s_1__ID></i><i class="fas fa-volume-up" id=s_2__ID></i></u>
+        <u style='cursor:pointer' title='click here to reset' id=sound__ID>Alarm: <i class="fas fa-volume-mute" id=s_1__ID></i><i class="fas fa-volume-up" id=s_2__ID></i></u> <span id=s_3__ID> it's time to walk when the music is up.</span>
         <br><br>
         <span style='margin-left:150px'>
             <u id="btn-play" style='cursor:pointer'>Play</u>&nbsp;&nbsp;
@@ -59,10 +59,12 @@
                 if(sound==0){
                     $('#s_1__ID').show();
                     $('#s_2__ID').hide();
+                    $('#s_3__ID').hide();
                 } 
                 else{
                     $('#s_1__ID').hide();
                     $('#s_2__ID').show();
+                    $('#s_3__ID').show();
                 }
             }
             sd();
