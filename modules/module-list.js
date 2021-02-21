@@ -23,7 +23,21 @@
         "crm-form":             {url:$vm.hosting_path+"/modules/it/crm-form.html",description:"crm-form"},
         "temperature-reports":  {url:$vm.hosting_path+"/modules/it/temperature-reports.html",description:"Temperature reports"},
         "printers":{url:$vm.hosting_path+"/modules/operations/printers.html",description:"printers",router:1},
-
+        "database-backup-rt":{
+            title:'CMS and research database backup files',
+            url:$H+"/database-backup/data.html",
+            folder:"research-tools",
+        },
+        "database-backup-SleepwareG3_Adult":{
+            title:'CMS and research database backup files',
+            url:$H+"/database-backup/data.html",
+            folder:"SleepwareG3_Adult",
+        },
+        "database-backup-SleepwareG3_Paeds":{
+            title:'CMS and research database backup files',
+            url:$H+"/database-backup/data.html",
+            folder:"SleepwareG3_Paeds",
+        },
         "lab-order-data-self":{
             title:'My communal ordering records',
             url:$H+"/lab-order/order/data.html",

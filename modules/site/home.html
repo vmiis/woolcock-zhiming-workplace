@@ -53,9 +53,13 @@
         function F__ID(){
             //-----------------------------------
             var sound=1;
+            var alarm=localStorage.getItem($vm.hosting_path+"_g_alarm");
+            if(alarm==null || alarm=="0") sound=1;
+            else sound=0;
             var sd=function(){
                 if(sound==0)  sound=1;
                 else sound=0;
+                localStorage.setItem($vm.hosting_path+"_g_alarm", sound );
                 if(sound==0){
                     $('#s_1__ID').show();
                     $('#s_2__ID').hide();
@@ -72,7 +76,7 @@
             if(txt==undefined) localStorage.setItem($vm.hosting_path+"_g_time", new Date() );
             setInterval(function(){
                 var txt1=localStorage.getItem($vm.hosting_path+"_g_time");
-                var dd=(3600-60-(new Date().getTime()-new Date(txt1).getTime())/1000);
+                var dd=(3600-(new Date().getTime()-new Date(txt1).getTime())/1000);
                 if(dd<0){ 
                    dd=0;
                    if(sound==1){
@@ -80,7 +84,7 @@
                        $('#time__ID').triggerHandler('click');
                    }
                 }
-                var m=(dd/60).toFixed(0); if(m.length==1) m='0'+m;
+                var m=Math.floor((dd/60)).toFixed(0); if(m.length==1) m='0'+m;
                 var s=(dd%60).toFixed(0);  if(s.length==1) s='0'+s;
                 $('#time__ID').text(+m+":"+s +" left to walk.");
             },1000);

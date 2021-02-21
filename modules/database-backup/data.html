@@ -1,0 +1,48 @@
+<section>
+    <!--
+	<div id=toolbar2__ID class="navbar navbar-default">
+	    	<div>
+				<button id=query2__ID type=button class="btn btn-secondary" title='Search for keyword'>Check</button>
+			</div>
+			<span id=title2__ID class='d-none d-md-block'></span>
+    </div>
+-->
+    <div style='padding:6px 0 6px 20px'>
+        <b>Backup Location:</b> <span id=folder__ID style='font-family: monospace;'></span>
+        VmInclude:__COMPONENT__/g/grid.01.html
+    </div>
+</section>
+<script>
+    function F__ID(){
+        //-------------------------------------
+        $('#toolbar__ID').hide();
+        //-------------------------------------
+        VmInclude:__COMPONENT__/g/grid.01.js
+        //-------------------------------------
+        var fields="Backup File Name|name,File Size|size,Backup Time|time";
+        m.fields=""+fields+"";
+        //-------------------------------------
+        $('#query2__ID').on('click',function(){
+            m.request_data();    
+        })
+
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        m.request_data=function(){
+            $('#folder__ID').text("\\\\fs2.shared.sydney.edu.au\\Medicine\\Woolcock\\Woolcock_Archive\\"+m.folder)
+            $vm.request({cmd:'backup-check',folder:m.folder},function(res){
+                m.records=res.result;
+                m.records.sort((a, b) => (b.time > a.time) ? 1 : -1)
+                for(var i=0;i<m.records.length;i++){
+                    m.records[i].time=new Date(m.records[i].time).toLocaleDateString('en-GB')+" "+new Date(m.records[i].time).toLocaleTimeString();
+                    m.records[i].size=numberWithCommas(m.records[i].size);
+                }
+                m.render();
+            })
+        }
+    }
+</script>
+<style>
+    VmInclude:__COMPONENT__/g/grid.01.css
+</style>
