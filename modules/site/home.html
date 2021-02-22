@@ -118,11 +118,11 @@
                 await osmd.load(scoreXml);
                 await osmd.render();
                 await audioPlayer.loadScore(osmd);
-                               
+                /*               
                 var el = document.getElementById('score__ID'),
                 elClone = el.cloneNode(true);
                 el.parentNode.replaceChild(elClone, el);
-                
+                */
                 document.getElementById("btn-play").addEventListener("click", () => {
                     audioPlayer.stop();audioPlayer.play();
                 });
