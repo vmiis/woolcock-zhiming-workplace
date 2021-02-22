@@ -25,12 +25,12 @@
         <u style='cursor:pointer' title='click here to reset' id=sound__ID>Alarm: <i class="fas fa-volume-mute" id=s_1__ID></i><i class="fas fa-volume-up" id=s_2__ID></i></u> <span id=s_3__ID> it's time to walk when the music is up.</span>
         <br><br>
         <span style='margin-left:150px'>
-            <u id="btn-play" style='cursor:pointer'>Play</u>&nbsp;&nbsp;
-            <u id="btn-pause"style='cursor:pointer'>Pause</u>&nbsp;&nbsp;
-            <u id="btn-stop" style='cursor:pointer'>Stop</u>&nbsp;&nbsp;
+            <button id="btn-play" class="btn btn-secondary">Play</button>
+            <button id="btn-pause" class="btn btn-secondary">Pause</button>
+            <button id="btn-continue" class="btn btn-secondary">Continue</button>
+            <button id="btn-stop" class="btn btn-secondary">Stop</button>
         </span>
-        <div id="score"></div>
-        <img src=__CURRENT_PATH__walking.gif style='margin-top:-500px' />
+        <div id="score__ID"></div>
     </div>
 
     <div id=page3__ID style='background-color:#f8f8f8;padding:50px'>
@@ -51,7 +51,18 @@
 
     <script>
         function F__ID(){
+            //**************************************************
+            //Page 1 functions
+            $('#get_in__ID').on('click',function(){
+                $vm.load_module('main-panel','',{})
+            })
             //-----------------------------------
+            $('#scroll_down__ID').on('click',function(e){
+                e.preventDefault();
+                $('html, body').animate({ scrollTop: $('#page2__ID').offset().top-60}, 800, 'linear');
+            })
+            //**************************************************
+            //Page 2 functions
             var sound=1;
             var alarm=localStorage.getItem($vm.hosting_path+"_g_alarm");
             if(alarm==null || alarm=="0") sound=1;
@@ -99,24 +110,27 @@
                 sd();
             })
             //-----------------------------------
-            $('#scroll_down__ID').on('click',function(e){
-                e.preventDefault();
-                $('html, body').animate({ scrollTop: $('#page2__ID').offset().top-60}, 800, 'linear');
-            })
-            //-----------------------------------
             var url="__CURRENT_PATH__score.musicxml";
-            const osmd = new opensheetmusicdisplay.OpenSheetMusicDisplay(document.getElementById("score"));
+            const osmd = new opensheetmusicdisplay.OpenSheetMusicDisplay(document.getElementById("score__ID"));
             //osmd.setOptions({followCursor:true});
             const audioPlayer = new OsmdAudioPlayer();
             async function music(scoreXml){
                 await osmd.load(scoreXml);
                 await osmd.render();
                 await audioPlayer.loadScore(osmd);
+                               
+                var el = document.getElementById('score__ID'),
+                elClone = el.cloneNode(true);
+                el.parentNode.replaceChild(elClone, el);
+                
                 document.getElementById("btn-play").addEventListener("click", () => {
                     audioPlayer.stop();audioPlayer.play();
                 });
                 document.getElementById("btn-pause").addEventListener("click", () => {
                     audioPlayer.pause();
+                });
+                document.getElementById("btn-continue").addEventListener("click", () => {
+                    audioPlayer.play();
                 });
                 document.getElementById("btn-stop").addEventListener("click", () => {
                     audioPlayer.stop();
@@ -125,9 +139,11 @@
             $.get(url,function(scoreXml){
                 music(scoreXml);
             },'text');
-            //-----------------------------------
+            //**************************************************
+            //Page 3 functions
             var a=window.location.href.replace('?/','').split('/'); a.pop();
             var n=a.pop();
+            var n2=a.pop();
             var t=n.replace(/-/g,' ');
             t=t.charAt(0).toUpperCase() + t.slice(1);
             $('#title__ID').text(t);
@@ -144,11 +160,9 @@
                 if($('#steps__ID').css('display')=='none') $('#steps__ID').show();
                 else $('#steps__ID').hide();
             })
-            /*
             $('#d__ID').on('click',function(){
-                GitZip.zipRepo('https://github.com/vmiis/woolcock-zhiming-workplace/tree/main/');
+                GitZip.zipRepo('https://github.com/vmiis/mockup/tree/main/'+n2+"/"+n);
             })
-            */
             //-----------------------------------
             $('#page1__ID').css('min-height',$vm.min_height+"px");
             $('#page2__ID').css('min-height',$vm.min_height+"px");
@@ -178,6 +192,11 @@
 			-moz-animation:scroll__ID 8s infinite; /* Firefox */
 			-webkit-animation:scroll__ID 8s infinite; /* Safari and Chrome */
 		}  
+        #score__ID{
+            background-position: top; 
+            background-repeat:no-repeat;
+            background-image: url(__CURRENT_PATH__walking.gif);
+        }
         @keyframes scroll__ID 
 		{
 			0%   {color:#fff;}
