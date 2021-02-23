@@ -25,10 +25,10 @@
         <u style='cursor:pointer' title='click here to reset' id=sound__ID>Alarm: <i class="fas fa-volume-mute" id=s_1__ID></i><i class="fas fa-volume-up" id=s_2__ID></i></u> <span id=s_3__ID> it's time to walk when the music is up.</span>
         <br><br>
         <span style='margin-left:150px'>
-            <button id="btn-play" class="btn btn-secondary">Play</button>
-            <button id="btn-pause" class="btn btn-secondary">Pause</button>
-            <button id="btn-continue" class="btn btn-secondary">Continue</button>
-            <button id="btn-stop" class="btn btn-secondary">Stop</button>
+            <button id="btn-play__ID" class="btn btn-secondary">Play</button>
+            <button id="btn-pause__ID" class="btn btn-secondary">Pause</button>
+            <button id="btn-continue__ID" class="btn btn-secondary">Continue</button>
+            <button id="btn-stop__ID" class="btn btn-secondary">Stop</button>
         </span>
         <div id="score__ID"></div>
     </div>
@@ -109,37 +109,27 @@
                 e.preventDefault();
                 sd();
             })
-            //-----------------------------------
+            //************************************************************
+            //Music sheet
             var url="__CURRENT_PATH__score.musicxml";
-            const osmd = new opensheetmusicdisplay.OpenSheetMusicDisplay(document.getElementById("score__ID"));
+            const osmd        =new opensheetmusicdisplay.OpenSheetMusicDisplay(document.getElementById("score__ID"),{autoResize:false});
+            const audioPlayer =new OsmdAudioPlayer();
             //osmd.setOptions({followCursor:true});
-            const audioPlayer = new OsmdAudioPlayer();
-            async function music(scoreXml){
-                await osmd.load(scoreXml);
-                await osmd.render();
-                await audioPlayer.loadScore(osmd);
-                /*               
-                var el = document.getElementById('score__ID'),
-                elClone = el.cloneNode(true);
-                el.parentNode.replaceChild(elClone, el);
-                */
-                document.getElementById("btn-play").addEventListener("click", () => {
-                    audioPlayer.stop();audioPlayer.play();
-                });
-                document.getElementById("btn-pause").addEventListener("click", () => {
-                    audioPlayer.pause();
-                });
-                document.getElementById("btn-continue").addEventListener("click", () => {
-                    audioPlayer.play();
-                });
-                document.getElementById("btn-stop").addEventListener("click", () => {
-                    audioPlayer.stop();
-                });
-            };
             $.get(url,function(scoreXml){
-                music(scoreXml);
+                osmd.load(scoreXml)
+                .then(
+                    function(){
+                        osmd.render();
+                        audioPlayer.loadScore(osmd);
+                    }
+                )
             },'text');
-            //**************************************************
+            //----------------------------------------------
+            $("#btn-play__ID").on('click',function(){       audioPlayer.stop(); audioPlayer.play();  });
+            $("#btn-pause__ID").on('click',function(){      audioPlayer.pause(); });
+            $("#btn-continue__ID").on('click',function(){   audioPlayer.play();  });
+            $("#btn-stop__ID").on('click',function(){       audioPlayer.stop();  });
+            //************************************************************
             //Page 3 functions
             var a=window.location.href.replace('?/','').split('/'); a.pop();
             var n=a.pop();
