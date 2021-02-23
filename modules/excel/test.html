@@ -46,19 +46,17 @@
         $vm.get_file=function(table,UID,field,filename,callback){
             var get_file_from_server=function(){
                 $vm.request({cmd:"file2",table:table,uid:UID,field:field,filename:filename},function(res, status, xhr){
-                    console.log(11111111)
-                    try{
-                        if(res.status=="np"){
-                            alert("No permissaion.");
-                            return;
-                        };
-                        if(res=="404"){
-                            alert("No such file.");
-                            return;
-                        };
+                    if(xhr.getResponseHeader("err")=='403'){
+                        alert("No permissaion.");
+                        return;
                     }
-                    catch(e){
-                        console.log(e);
+                    if(xhr.getResponseHeader("err")=='404'){
+                        alert("No such file.");
+                        return;
+                    }
+                    if(xhr.getResponseHeader("err")=='604'){
+                        alert("No such file!");
+                        return;
                     }
                     if('caches' in window){
                         caches.open('VM').then(cache => {
@@ -127,18 +125,18 @@ $vm.request=function(req,callback,progress){
         contentType: "application/json",
         charset:"utf-8",
         dataType: "json",
-        error: function(jqXHR,error, errorThrown){ 
-            if(error && req.cmd=='file'){callback(404);}
+        error: function(jqXHR, error, errorThrown){ 
+            if(error && (req.cmd=='file' || req.cmd=='file2')){
+                callback(404);
+            }
             if(jqXHR.status) {} 
             else {}},
         data: JSON.stringify(req),
         success: function(c,textStatus, request){
-
-console.log(2222222)            
             var dt2=new Date().getTime();
             if($vm.debug_message===true){
                 if(c.status=='ok' || req.cmd=='file')  console.log("%c"+req.cmd+'('+this_N+') FROM'+" --- "+(dt2-dt1).toString()+"ms","color:lightgreen",c);
-                else                                    console.log("%c"+req.cmd+'('+this_N+') FROM'+" --- "+(dt2-dt1).toString()+"ms","color:red",c);
+                else                                   console.log("%c"+req.cmd+'('+this_N+') FROM'+" --- "+(dt2-dt1).toString()+"ms","color:red",c);
             }
             if($vm.ajax_server_error==1) return;
             try{
@@ -149,7 +147,6 @@ console.log(2222222)
         },
         dataFilter: $vm.request_filter,
     }
-    //if(req.cmd=="file2") param.contentType="application/octet-stream";
     if(progress!=undefined){
         param.xhr=function(){
             var xhr = $.ajaxSettings.xhr() ;
@@ -174,7 +171,7 @@ console.log(2222222)
             return xhr;
         }
     }
-    else if( req.cmd=="file" && req.datetime==undefined ){
+    else if( (req.cmd=="file" || req.cmd=="file2") && req.datetime==undefined ){
         delete param.dataType;
         param.xhrFields={responseType: 'blob'};
     }
