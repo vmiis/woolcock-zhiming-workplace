@@ -1,0 +1,33 @@
+<section>
+    <section>
+        <div id=toolbar__ID class="navbar navbar-default" style='background-color: #ccc;'>
+            <span id=title__ID></span>
+        </div>
+        <div id=table__ID>
+            <table id=grid__ID></table>
+        </div>
+    </section>
+</section>
+<script>
+    function F__ID(){
+        //-------------------------------
+        $('#title__ID').text("ThankQ People Fields and Raiser's Edge Constituent Fields Mapping");
+        var sheet="transaction";
+        $('#D__ID').on('load',function(){  
+            $vm.get_file("file",4,"file","thankq-people-to-re-constituent.xlsx",function(res){
+                var workbook = XLSX.read(res.result, {type:"base64"});
+                workbook.SheetNames.forEach(function(sheetName) {
+                    if(sheetName==sheet){
+                        var jdata=XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {header:1});
+                        var txt=$vm.json_to_table(jdata);
+                        $('#grid__ID').html(txt);
+                    }
+                })
+            });
+        })
+        //-------------------------------
+    }
+</script>
+<style>
+    VmInclude:__COMPONENT__/g/grid.01.css
+</style>

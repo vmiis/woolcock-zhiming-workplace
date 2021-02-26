@@ -43,6 +43,11 @@
             Table:"file",
             description:"thankq-all-people-fields"
         },
+        "thankq-t-fields": {
+            url:$vm.hosting_path+"/modules/excel/thankq-t-to-gift.html",
+            Table:"file",
+            description:"thankq-t-fields"
+        },
         "database-backup-rt":{
             title:'CMS and research database backup files',
             url:$H+"/database-backup/data.html",
