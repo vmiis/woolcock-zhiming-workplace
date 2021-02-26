@@ -1,0 +1,68 @@
+    <section>
+        <div id=toolbar__ID class="navbar navbar-default" style='background-color: #ccc;'>
+            <div>
+                <button id=data__ID type=button class="btn btn-secondary" title='refresh'>Load</button> 
+                <span id=title__ID style='margin-left:16px'></span>
+                <span id=total__ID style='margin-left:16px'></span>
+            </div>
+        </div>
+        <div id=table__ID>
+            <table id=grid__ID></table>
+        </div>
+    </section>
+    <!--VmInclude:__COMPONENT__/m/model.01.html-->
+    <script>
+        function F__ID(){
+            $('#msg__ID').text('Loading data...');
+            var first=0;
+            //-------------------------------
+            $('#title__ID').text("thankq all people");
+            var sheet="Sheet1";
+            //-------------------------------
+            $('#D__ID').on('show',function(){
+                if(first==0){
+                    first=1;
+                    load_data();
+                }
+            })
+            //-------------------------------
+            $('#data__ID').on('click',function(){
+                load_data();
+            })
+            //-------------------------------
+            var load_data=function(){
+				open_model__ID();
+                $vm.get_file("file",3,"file","thankq-all-people.xlsx",function(res){
+                    var workbook = XLSX.read(res.result, {type:"base64"});
+                    workbook.SheetNames.forEach(function(sheetName) {
+                        if(sheetName==sheet){
+                            var jdata=XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {header:1});
+                            $('#total__ID').text(jdata.length);                                
+                            var txt=$vm.json_to_table(jdata);
+                            $('#grid__ID').html(txt);
+                            close_model__ID();
+                        }
+                    })
+                    /*
+                    res.arrayBuffer().then( function(data){
+                        var workbook = XLSX.read(data, {type:"array"});
+                        workbook.SheetNames.forEach(function(sheetName) {
+                            if(sheetName==sheet){
+                                var jdata=XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {header:1});
+                                $('#total__ID').text(jdata.length);                                
+                                jdata.length
+                                var txt=$vm.json_to_table(jdata);
+                                $('#grid__ID').html(txt);
+                                close_model__ID();
+                            }
+                        })
+                    })
+                    */
+                });
+            }
+            //-------------------------------
+        }
+    </script>
+    <style>
+        /*VmInclude:__COMPONENT__/g/grid.01.css*/
+    </style>

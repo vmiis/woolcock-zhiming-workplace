@@ -28,6 +28,21 @@
             Table:"file",
             description:"test"
         },
+        "thankq-all-transactions": {
+            url:$vm.hosting_path+"/modules/excel/thankq-all-transactions.html",
+            Table:"file",
+            description:"thankq-all-transactions"
+        },
+        "thankq-all-people": {
+            url:$vm.hosting_path+"/modules/excel/thankq-all-people.html",
+            Table:"file",
+            description:"thankq-all-people"
+        },
+        "thankq-people-fields": {
+            url:$vm.hosting_path+"/modules/excel/thankq-people-to-re-constituent.html",
+            Table:"file",
+            description:"thankq-all-people-fields"
+        },
         "database-backup-rt":{
             title:'CMS and research database backup files',
             url:$H+"/database-backup/data.html",
