@@ -23,6 +23,15 @@
         "crm-form":             {url:$vm.hosting_path+"/modules/it/crm-form.html",description:"crm-form"},
         "temperature-reports":  {url:$vm.hosting_path+"/modules/it/temperature-reports.html",description:"Temperature reports"},
         "printers":{url:$vm.hosting_path+"/modules/operations/printers.html",description:"printers",router:1},
+        "referrers":{
+            url:$vm.hosting_path+"/modules/coreplus/referrers/data.html",
+            Table:"referrer",
+            description:"Referrers"
+        },
+        "coreplus-datatable-relationships":{
+            url:$H+"/diagram/coreplus-datatable-relationships.html",
+            router:1
+        },
         "test": {
             url:$vm.hosting_path+"/modules/excel/test.html",
             Table:"file",
