@@ -37,6 +37,10 @@
             url:$H+"/diagram/coreplus-datatable-relationships.html",
             router:1
         },
+        "coreplus-referral-diagram":{
+            url:$H+"/diagram/referral.html",
+            router:1
+        },
         "test": {
             url:$vm.hosting_path+"/modules/excel/test.html",
             Table:"file",
