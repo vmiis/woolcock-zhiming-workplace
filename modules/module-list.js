@@ -28,6 +28,11 @@
             Table:"referrer",
             description:"Referrers"
         },
+        "clinics":{
+            url:$vm.hosting_path+"/modules/coreplus/clinics/data.html",
+            Table:"clinic",
+            description:"Clinics"
+        },
         "coreplus-datatable-relationships":{
             url:$H+"/diagram/coreplus-datatable-relationships.html",
             router:1
