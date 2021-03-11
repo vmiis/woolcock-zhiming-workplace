@@ -28,6 +28,12 @@
             Table:"referrer",
             description:"Referrers"
         },
+        "referrals":{
+            url:$vm.hosting_path+"/modules/coreplus/referrals/data.html",
+            Table:"referral",
+            description:"Referrals",
+            form_module:"jsonv",
+        },
         "clinics":{
             url:$vm.hosting_path+"/modules/coreplus/clinics/data.html",
             Table:"clinic",
