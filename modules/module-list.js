@@ -26,18 +26,26 @@
         "referrers":{
             url:$vm.hosting_path+"/modules/coreplus/referrers/data.html",
             Table:"referrer",
+            form_module:"jsonv",
             description:"Referrers"
         },
         "referrals":{
             url:$vm.hosting_path+"/modules/coreplus/referrals/data.html",
             Table:"referral",
-            description:"Referrals",
             form_module:"jsonv",
+            description:"Referrals",
         },
         "clinics":{
             url:$vm.hosting_path+"/modules/coreplus/clinics/data.html",
             Table:"clinic",
+            form_module:"jsonv",
             description:"Clinics"
+        },
+        "patients":{
+            url:$vm.hosting_path+"/modules/coreplus/patients/data.html",
+            Table:"patient",
+            form_module:"jsonv",
+            description:"Patients"
         },
         "coreplus-datatable-relationships":{
             url:$H+"/diagram/coreplus-datatable-relationships.html",

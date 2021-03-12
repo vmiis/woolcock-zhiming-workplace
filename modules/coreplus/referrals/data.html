@@ -9,7 +9,19 @@
         var fields=`
             _Form,
             ID|UID,
-            Patient ID|I1, 
+            Patient_Name,
+            Date_Of_Birth,
+            startDate,
+            endDate,
+            Provider_Number, 
+            Clinic_Address, 
+            Phone,
+            Referrer_Name,
+            Practitioner_ID
+
+        `;
+        /*
+        Patient ID|I1, 
             Practitioner ID|I2,
             startDate,
             endDate,
@@ -17,17 +29,50 @@
             Referrer ID|I4, 
             Provider Number|I5, 
             createdAt,updatedAt
-        `;
+        */
+
         m.fields=fields;
         //-------------------------------------
         m.cell_render=function(records,I,field,td){
             switch(field){
+                case 'Patient_Name':
+                    td.text(records[I].Data.client.firstName+" "+records[I].Data.client.lastName);
+                    break;
+                case "Date_Of_Birth":  var v=records[I].Data.client.dateOfBirth; if(v==undefined) v="";  td.text(v.substr(0,10));   break;
+                case 'startDate':
+                case 'endDate':
+                    if(records[I].Data.referral[field]!=undefined)
+                        td.text(records[I].Data.referral[field].substr(0,10));
+                    break;
+                case 'Provider_Number':
+                    td.text(records[I].Data.referral.referrerLocation['providerNumber']);
+                    break;
+                case 'Clinic_Address':
+                    var a1=records[I].Data.referral.referrerLocation['street']; if(a1==undefined) a1="";
+                    var a2=records[I].Data.referral.referrerLocation['suburb']; if(a2==undefined) a2="";
+                    var a3=records[I].Data.referral.referrerLocation['postcode']; if(a3==undefined) a3="";
+                    td.text(a1+" "+a2+" "+a3);
+                    break;
+                case 'Phone':
+                    var p=records[I].Data.referral.referrerLocation['phone']; if(p==undefined) p="";
+                    td.text(p);
+                    break;
+                case 'Referrer_Name':
+                    var v=records[I].Data.referral.referrerLocation['referrer_name']; if(v==undefined) v="";
+                    td.text(v);
+                    break;
+                case 'Practitioner_ID':
+                    var v=records[I].Data.referral.practitionerId; if(v==undefined) v="";
+                    td.text(v);
+                    break;
+                /*
                 case 'startDate':
                 case 'endDate':
                     if(records[I].Data[field]!=undefined){
                         td.text(records[I].Data[field].substr(0,10));
                     }
                     break;
+                    */
             }
         }
         //-------------------------------------
