@@ -20,17 +20,6 @@
             Practitioner_ID
 
         `;
-        /*
-        Patient ID|I1, 
-            Practitioner ID|I2,
-            startDate,
-            endDate,
-            Clinic ID|I3, 
-            Referrer ID|I4, 
-            Provider Number|I5, 
-            createdAt,updatedAt
-        */
-
         m.fields=fields;
         //-------------------------------------
         m.cell_render=function(records,I,field,td){
@@ -76,6 +65,51 @@
             }
         }
         //-------------------------------------
+        m.export_process=function(data){
+            var new_data=[];
+            for(var i=0;i<data.length;i++){
+                var d=data[i];
+                var new_d={};
+                new_d.Record_ID=d.ID;
+                new_d.Referrer_Letter_Stsrt_Date=d.referral.startDate;
+                if(new_d.Referrer_Letter_Stsrt_Date!=undefined) new_d.Referrer_Letter_Stsrt_Date=new_d.Referrer_Letter_Stsrt_Date.substr(0,10);
+                new_d.Referrer_Name=d.referral.referrerLocation['referrer_name'];
+                new_d.Provider_Number=d.referral.referrerLocation['providerNumber'];
+                var a1=d.referral.referrerLocation['street']; if(a1==undefined) a1="";
+                var a2=d.referral.referrerLocation['suburb']; if(a2==undefined) a2="";
+                var a3=d.referral.referrerLocation['postcode']; if(a3==undefined) a3="";
+                new_d.Clinic_Address=a1+" "+a2+" "+a3;
+                new_d.Clinic_Phone=d.referral.referrerLocation['phone'];
+                new_d.Clinic_Fax=d.referral.referrerLocation['fax'];
+                new_d.Clinic_Email=d.referral.referrerLocation['email'];
+                new_d.Patient_Name=d.client.firstName+" "+d.client.lastName;
+                new_data.push(new_d);
+            }
+            return new_data;
+        }
+        //-------------------------------------
+
+m.export_records=function(){
+    //var req={cmd:"export",table:m.Table,query:m.query,I1:m.I1,search:$('#keyword__ID').val(),start:1,end:200}
+    var req={cmd:"export",table:m.Table,query:m.query,I1:m.I1,search:$('#keyword__ID').val()}
+    open_model__ID();
+    $vm.request(req,function(N,i,txt){
+        console.log(i+"/"+N);
+        //$('#msg__ID').text((100*i/N).toFixed(2)+"%");
+        $('#msg__ID').text(i);
+        if(i==-1){
+            $('#msg__ID').text('processing...');
+            var len=txt.length;
+            var n_txt="["+txt.substring(5,len-9)+"]";
+            var o=JSON.parse(n_txt);
+            if(m.export_process!=undefined) o=m.export_process(o);
+            $vm.download_csv(m.Table+".csv",o);
+            close_model__ID();
+        }
+    });
+}
+//---------------------------------------------
+
     }
 </script>
 <style>
