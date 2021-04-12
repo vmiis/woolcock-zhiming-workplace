@@ -15,7 +15,7 @@
                     <li><a href="?/main-panel"><i class="fas fa-table"></i> Control Panel</a></li>
                     <li><a href="?/diagram"><i class="fas fa-project-diagram"></i> Diagram</a></li>
                     <li><a w=1 href="https://www.vmiis.com"><i class="fa fa-info"></i> About</a></li>
-                    <li><a href="" id=signin__ID ><i class="fa fa-user"></i> Sign in</a></li>
+                    <li><a href="?/signin" id=signin__ID ><i class="fa fa-user"></i> Sign in</a></li>
                     <li><a href="" id=signout__ID ><i class="fa fa-user"></i> Sign out</a></li>
                 </ul>
             </div>
@@ -107,9 +107,9 @@
                 }
             })
             //--------------------------------------
-            $('#signin__ID').on('click',function(){
-                $vm.m365_signin();  
-            })
+            //$('#signin__ID').on('click',function(){
+            //    $vm.m365_signin();  
+            //})
             //------------------------------------
             $('#signout__ID').on('click',function(){
                 $vm.clear_token();

@@ -228,6 +228,21 @@
             url:$H+"/supervisor/form.html",
             Table:"communal-ordering-supervisor",
         },
+        "cms-sleep-study__":{
+            title:"Sleep study",
+            url:$H+"/cms/sleep-study/data.html",
+            Table:"cms-sleep-study",
+            description:"Sleep study",
+            router:1,
+        },
+        "cms-sleep-study":{
+            title:"Sleep study",
+            url:$H+"/cms/sleep-study/data.html",
+            Table:"400448",
+            form_module:"jsonv",
+            description:"Sleep study",
+            router:1,
+        },
     }
     set_prefix(prefix,modules);
     //-------------------------------------------------------------------------------------
