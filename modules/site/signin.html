@@ -6,13 +6,22 @@
     </div>
     <div id=panel__ID>
         <div>
-            <li><i class="fab fa-microsoft"></i> <a href='microsoft'>Microsoft</a></li>
-            <li><i class="fab fa-google"></i> <a href='google'>Google</a></li>
-            <li><i class="fab fa-facebook"></i> <a href='facebook'>Facebook</a></li>
-            <li><i class="fab fa-github"></i> <a href='github'>GitHub</a></li>
-            <li><a href='blackbaud'>Blackbaud</a></li>
-            <li><a href='intuit'>Intuit</a></li>
-            
+            <span class=label__ID>Identity</span>
+            (Who you are, based on the email, accessing Woolcock resources)
+            <ul>
+                <li><i class="fab fa-microsoft"></i> <a href='microsoft'>Microsoft</a> <span id=microsoft_email></span></li>
+                <li><i class="fab fa-google"></i> <a href='google'>Google</a> <span id=google_email></span></li>
+                <li><i class="fab fa-facebook"></i> <a href='facebook'>Facebook</a> <span id=facebook_email></span></li>
+                <li><i class="fab fa-github"></i> <a href='github'>GitHub</a> <span id=github_email></span></li>
+            </ul>
+            <span class=label__ID>Resources</span>
+            (Accessing third party resources on behalf of you)
+            <ul>
+                <li><a href='blackbaud'>Blackbaud</a></li>
+                <li><a href='intuit'>Intuit</a></li>
+                <li><a href='mailchimp'>Mailchimp</a> <span id=mailchimp_username></span> <a href='mailchimp_signout' style='display:none'>Sign Out</a> </li>
+                <li><a href='test'>Test</a></li>
+            </ul>
         </div>
     </div>
     <script>
@@ -22,7 +31,6 @@
             if(prefix==undefined) prefix="";
             //--------------------------------------------------------
             var u=window.location.origin+"/auth.html"
-            //var u="http://localhost:8000/vmiis/woolcock-zhiming-workplace/auth.html";
             //--------------------------------------------------------
             $('#panel__ID a').on('click',function(e){
                 e.preventDefault();
@@ -83,25 +91,107 @@
                     url+='&state=exchange-intuit-token';
                     window.open(url);
                 }
+                if(href=="mailchimp"){
+                    url='https://login.mailchimp.com/oauth2/authorize';
+                    url+='?response_type=code';
+                    url+='&client_id=333393775932';
+                    url+='&redirect_uri=http://127.0.0.1:8000/auth.html';
+                    //url+='&scope=openid profile email';
+                    url+='&state=exchange-mailchimp-token';
+                    window.open(url);
+                }
+                switch(href){
+                    case "mailchimp_signout":  sessionStorage.removeItem("mailchimp_oauth");  $('#mailchimp_username').text(''); $('a[href=mailchimp_signout]').hide(); break;
+                    case "test": test(); break;
+                }
+            })
+            //--------------------------------------------------------
+            var login_display=function(){
+                $('#microsoft_email').text('');
+                $('#google_email').text('');
+                $('#facebook_email').text('');
+                $('#github_email').text('');
+                var provider=sessionStorage.getItem("current_id_provider");
+                var email=$vm.user_name; if(email=="guest") email="";
+                switch(provider){
+                    case "microsoft": $('#microsoft_email').text(email); break;
+                    case "google": $('#google_email').text(email);  break;
+                    case "facebook": $('#facebook_email').text(email);  break;
+                    case "github": $('#github_email').text(email);  break;
+                }
+                if(sessionStorage.getItem("mailchimp_oauth")!=null){ $('#mailchimp_username').text(sessionStorage.getItem("mailchimp-username")); $('a[href=mailchimp_signout]').show(); }
+            }
+            //--------------------------------------------------------
+            $('#D__ID').on('load',function(){
+                login_display();
             })
             //--------------------------------------------------------
             window.onmessage=function(e){
                 if (e.origin == window.location.origin) {
                     var cmd=e.data.cmd;
                     var code=e.data.code;
-                    if(code!=undefined && cmd!=undefined){ $vm.exchange_token(cmd,code,u); return; }
+                    if(code!=undefined && cmd!=undefined) $vm.exchange_token(cmd,code,u); 
                 }
             };
+            //------------------------------------
+            var process_identity=function(res){
+                $vm.user_name=res.result.user_name;
+                $vm.displayname=res.result.displayname;
+                $vm.set_token(res.result.token,res.result.username);
+                $vm.show_user();
+                var t=JSON.parse(res.result.token.split('|')[0]);
+                $vm.groups=t.groups;
+            }
+            //------------------------------------          
+            var http_request=function(input,callback){
+                var p={}
+                for(a in input){
+                    p[a]=input[a];
+                }
+                p.error=function(jqXHR,error, errorThrown){},
+                p.success=function(c,textStatus, request){callback(c)},
+                console.log(p);
+                $.ajax(p);
+            }
+            //------------------------------------
+            var test=function(){
+                var t=sessionStorage.getItem("mailchimp_oauth");
+                t=JSON.parse(t);
+                t=t.access_token;
+                /*
+                var headers={
+                    Authorization: "OAuth "+t
+                }
+                http_request(
+                    {
+                        url:"https://api.mailchimp.com/3.0/users/info",
+                        type:"GET",
+                        headers:headers
+                    }, 
+                    function(c){
+                        console.log(c)
+                    }
+                );
+                */
+               $vm.request({cmd:'mailchimp-api',access_token:t},function(res){
+                   console.log(res);
+
+               })
+            }
             //------------------------------------
             $vm.exchange_token=function(cmd,token,redirect_uri){
                 $vm.request({cmd:cmd,token:token,redirect_uri:redirect_uri},function(res){
                     if(res.status=='ok'){
-                        $vm.user_name=res.result.user_name;
-                        $vm.displayname=res.result.displayname;
-                        $vm.set_token(res.result.token,res.result.username);
-                        $vm.show_user();
-                        var t=JSON.parse(res.result.token.split('|')[0]);
-                        $vm.groups=t.groups;
+                        switch(cmd){
+                            case "exchange-microsoft-token":    sessionStorage.setItem("current_id_provider","microsoft"); process_identity(res); break;
+                            case "exchange-google-token":       sessionStorage.setItem("current_id_provider","google");    process_identity(res); break;
+                            case "exchange-facebook-token":     sessionStorage.setItem("current_id_provider","facebook");  process_identity(res); break;
+                            case "exchange-github-token":       sessionStorage.setItem("current_id_provider","github");    process_identity(res); break;
+                            case "exchange-mailchimp-token":
+                                sessionStorage.setItem("mailchimp_oauth",JSON.stringify(res.result));
+                                break;
+                        }
+                        login_display();
                     }
                 })
             }
@@ -122,7 +212,7 @@
             font-size:14px;
             padding:0px 50px 10px 50px;
             font-size:14px;
-    		column-count: 4;
+    		column-count: 1;
     		column-width: 300px;
     		column-gap: 30px;
             font-size:14px;
@@ -130,6 +220,9 @@
         #panel__ID a{
             color:#555;
         }
+        #panel__ID li a{
+            margin-right:30px;
+        }        
         #panel__ID a:hover{
             color:red;
         }
@@ -166,6 +259,13 @@
         }
         #panel__ID div{
             break-inside: avoid;
+        }
+        .label__ID{
+            font-size: 130%;
+            font-weight: bold;
+            color:#2b3c5a;
+            display: inline-block;
+            margin-bottom: 10px;
         }
         @media screen and (max-width: 1000px) {
             .h_img__ID{
