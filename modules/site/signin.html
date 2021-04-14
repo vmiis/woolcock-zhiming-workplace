@@ -119,7 +119,14 @@
                     case "facebook": $('#facebook_email').text(email);  break;
                     case "github": $('#github_email').text(email);  break;
                 }
-                if(sessionStorage.getItem("mailchimp_oauth")!=null){ $('#mailchimp_username').text(sessionStorage.getItem("mailchimp-username")); $('a[href=mailchimp_signout]').show(); }
+                if(sessionStorage.getItem("mailchimp_oauth")!=null){ 
+                    $('a[href=mailchimp_signout]').show(); 
+                    if(sessionStorage.getItem("mailchimp_oauth_root")!=null){ 
+                        var a=JSON.parse(sessionStorage.getItem("mailchimp_oauth_root"));
+
+                        $('#mailchimp_username').text(a.first_name+" "+a.last_name); 
+                    }
+                }
             }
             //--------------------------------------------------------
             $('#D__ID').on('load',function(){
@@ -173,7 +180,9 @@
                     }
                 );
                 */
-               $vm.request({cmd:'mailchimp-api',access_token:t},function(res){
+               var path="/3.0/search-members?query=zhiming";
+               var dc="us3";
+               $vm.request({cmd:'mailchimp-api',access_token:t,path:path,dc:dc},function(res){
                    console.log(res);
 
                })
@@ -189,6 +198,10 @@
                             case "exchange-github-token":       sessionStorage.setItem("current_id_provider","github");    process_identity(res); break;
                             case "exchange-mailchimp-token":
                                 sessionStorage.setItem("mailchimp_oauth",JSON.stringify(res.result));
+                                $vm.request({cmd:'mailchimp-api',access_token:res.result.access_token,path:"/3.0/",dc:"us3"},function(res){
+                                    sessionStorage.setItem("mailchimp_oauth_root",res.result);
+                                    login_display();
+                                })
                                 break;
                         }
                         login_display();
@@ -220,7 +233,7 @@
         #panel__ID a{
             color:#555;
         }
-        #panel__ID li a{
+        #panel__ID li a, #panel__ID li span{
             margin-right:30px;
         }        
         #panel__ID a:hover{
