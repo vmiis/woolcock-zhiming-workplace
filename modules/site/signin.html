@@ -95,8 +95,8 @@
                     url='https://login.mailchimp.com/oauth2/authorize';
                     url+='?response_type=code';
                     url+='&client_id=333393775932';
-                    url+='&redirect_uri=http://127.0.0.1:8000/auth.html';
-                    //url+='&scope=openid profile email';
+                    url+='&redirect_uri='+u;
+                    //url+='&redirect_uri=http://127.0.0.1:8000/auth.html';
                     url+='&state=exchange-mailchimp-token';
                     window.open(url);
                 }

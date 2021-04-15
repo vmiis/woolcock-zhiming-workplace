@@ -32,23 +32,6 @@
         </span>
         <div id="score__ID"></div>
     </div>
-
-    <div id=page3__ID style='background-color:#f8f8f8;padding:50px'>
-        <h5 id=title__ID></h5>
-        <div style='max-width:600px'>
-            <ul>
-                Highly scalable, flexible, reusable, replaceable, maintainable, testable, loosely coupled, independently deployable, organized around business capabilities, owned and maintained by a small team.
-            </ul>
-        </div>
-        <br>
-        <u><a id=d__ID href=https://github.com/vmiis/woolcock-zhiming-workplace/archive/main.zip style='cursor:pointer;color:#000'>Download and run this micro web application on a local computer</a></u><br>
-        <ul>
-            <li>Install NodeJS if haven't (https://nodejs.org/)</li>
-            <li>Run start-server.bat, you will see the a web service address, for example http://localhost:57193</li>
-            <li>Use a web browser to see this micro web application</li>
-        </ul>
-    </div>
-
     <script>
         function F__ID(){
             //**************************************************
@@ -130,33 +113,9 @@
             $("#btn-continue__ID").on('click',function(){   audioPlayer.play();  });
             $("#btn-stop__ID").on('click',function(){       audioPlayer.stop();  });
             //************************************************************
-            //Page 3 functions
-            var a=window.location.href.replace('?/','').split('/'); a.pop();
-            var n=a.pop();
-            var n2=a.pop();
-            var t=n.replace(/-/g,' ');
-            t=t.charAt(0).toUpperCase() + t.slice(1);
-            $('#title__ID').text(t);
-            $('#app__ID').text(n);
-            
-            var txt="";
-            for(a in $vm.module_list){
-                var f=$vm.module_list[a].url.split('/').pop(0);
-                var d=$vm.module_list[a].description; if(d==undefined) d="";
-                if(a.split('_')[0]!='sys') txt+="<li><b>"+f+"</b> "+d+"</li>";
-            }
-            $('#list__ID').html(txt);
-            $('#g__ID').on('click',function(){ 
-                if($('#steps__ID').css('display')=='none') $('#steps__ID').show();
-                else $('#steps__ID').hide();
-            })
-            $('#d__ID').on('click',function(){
-                GitZip.zipRepo('https://github.com/vmiis/mockup/tree/main/'+n2+"/"+n);
-            })
-            //-----------------------------------
             $('#page1__ID').css('min-height',$vm.min_height+"px");
             $('#page2__ID').css('min-height',$vm.min_height+"px");
-            $('#page3__ID').css('min-height',$vm.min_height+"px");
+            //$('#page3__ID').css('min-height',$vm.min_height+"px");
             //-----------------------------------
         }
     </script>
