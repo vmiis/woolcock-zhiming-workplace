@@ -243,12 +243,8 @@
             description:"Sleep study",
             router:1,
         },
-        "mailchimp-search":{
-            title:"Mailchimp",
-            url:$H+"/mailchimp/search.html",
-            description:"Mailchimp",
-            router:1,
-        },
+        "mailchimp-api":{  url:$H+"/mailchimp/search.html",  router:1  },
+        "blackbaud-api":{  url:$H+"/blackbaud/search.html",  router:1  },
     }
     set_prefix(prefix,modules);
     //-------------------------------------------------------------------------------------

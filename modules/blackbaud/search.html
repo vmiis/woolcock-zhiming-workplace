@@ -1,6 +1,6 @@
 <div id=D__ID>
     <div style='width:100%'>
-        <a target=_blank href=https://mailchimp.com/developer/marketing/api/ ><u>API Reference</u> </a><br>
+        <a target=_blank href=https://developer.blackbaud.com/skyapi/apis ><u>API Reference</u> </a><br>
         <span style='color:black'>Path:</span> <input style='width: calc(100% - 120px)' type=text id=path__ID></input> <button type=button class="btn btn-secondary" id=go__ID>Search</button>
     </div>
     <div>
@@ -18,7 +18,7 @@
                 $('#json_renderer__ID').jsonViewer(input, options);
             }
             $('#go__ID').on('click',function(){
-                var t=sessionStorage.getItem("mailchimp_oauth");
+                var t=sessionStorage.getItem("blackbaud_oauth");
                 if(t==null){
                     alert("You haven't login!");
                     return;
@@ -26,8 +26,7 @@
                 t=JSON.parse(t);
                 t=t.access_token;
                 var path=$('#path__ID').val();
-                //var path="/3.0/search-members?query=zhiming";
-                $vm.request({cmd:'mailchimp-api',access_token:t,path:"/3.0"+path,dc:"us3"},function(res){
+                $vm.request({cmd:'blackbaud-api',access_token:t,path:path},function(res){
                    renderJson(JSON.parse(res.result));
                 })
             })

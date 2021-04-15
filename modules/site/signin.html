@@ -17,10 +17,10 @@
             <span class=label__ID>Resources</span>
             (Accessing third party resources on behalf of you)
             <ul>
-                <li><a href='blackbaud'>Blackbaud</a></li>
+                <li><a href='blackbaud'>Blackbaud</a> <span id=blackbaud_username></span> <a href='blackbaud_signout' style='display:none'>Sign Out</a> </li>
                 <li><a href='intuit'>Intuit</a></li>
                 <li><a href='mailchimp'>Mailchimp</a> <span id=mailchimp_username></span> <a href='mailchimp_signout' style='display:none'>Sign Out</a> </li>
-                <li><a href='test'>Test</a></li>
+                <!--<li><a href='test'>Test</a></li>-->
             </ul>
         </div>
     </div>
@@ -78,6 +78,7 @@
                     url='https://oauth2.sky.blackbaud.com/authorization';
                     url+='?response_type=code';
                     url+='&client_id=03210bfe-d6b5-44c6-aa6a-d681ebbe5743';
+                    url+="&environment_id=p-Lpg6w_hkuEuVlqZrq7Oz7g";
                     url+='&redirect_uri='+u;
                     url+='&state=exchange-blackbaud-token';
                     window.open(url);
@@ -102,6 +103,7 @@
                 }
                 switch(href){
                     case "mailchimp_signout":  sessionStorage.removeItem("mailchimp_oauth");  $('#mailchimp_username').text(''); $('a[href=mailchimp_signout]').hide(); break;
+                    case "blackbaud_signout":  sessionStorage.removeItem("blackbaud_oauth");  $('#blackbaud_username').text(''); $('a[href=blackbaud_signout]').hide(); break;
                     case "test": test(); break;
                 }
             })
@@ -123,9 +125,13 @@
                     $('a[href=mailchimp_signout]').show(); 
                     if(sessionStorage.getItem("mailchimp_oauth_root")!=null){ 
                         var a=JSON.parse(sessionStorage.getItem("mailchimp_oauth_root"));
-
                         $('#mailchimp_username').text(a.first_name+" "+a.last_name); 
                     }
+                }
+                if(sessionStorage.getItem("blackbaud_oauth")!=null){ 
+                    $('a[href=blackbaud_signout]').show(); 
+                    var a=JSON.parse(sessionStorage.getItem("blackbaud_oauth"));
+                    $('#blackbaud_username').text(a.given_name+" "+a.family_name); 
                 }
             }
             //--------------------------------------------------------
@@ -202,6 +208,9 @@
                                     sessionStorage.setItem("mailchimp_oauth_root",res.result);
                                     login_display();
                                 })
+                                break;
+                            case "exchange-blackbaud-token":
+                                sessionStorage.setItem("blackbaud_oauth",JSON.stringify(res.result));
                                 break;
                         }
                         login_display();
