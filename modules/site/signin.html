@@ -7,7 +7,7 @@
     <div id=panel__ID>
         <div>
             <span class=label__ID>Identity</span>
-            (Who you are, based on the email, accessing Woolcock resources)
+            (Check who you are, accessing Woolcock resources, permissions granted based on your email)
             <ul>
                 <li><i class="fab fa-microsoft"></i> <a href='microsoft'>Microsoft</a> <span id=microsoft_email></span></li>
                 <li><i class="fab fa-google"></i> <a href='google'>Google</a> <span id=google_email></span></li>
@@ -78,7 +78,6 @@
                     url='https://oauth2.sky.blackbaud.com/authorization';
                     url+='?response_type=code';
                     url+='&client_id=03210bfe-d6b5-44c6-aa6a-d681ebbe5743';
-                    url+="&environment_id=p-Lpg6w_hkuEuVlqZrq7Oz7g";
                     url+='&redirect_uri='+u;
                     url+='&state=exchange-blackbaud-token';
                     window.open(url);

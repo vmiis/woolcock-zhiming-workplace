@@ -17,7 +17,10 @@
             }
             var m=$vm.module_list['__MODULE__'];
             $('#D__ID').on('load',function(){
-                if(m.input.record.Data!=undefined){
+                if(m.input.json_data!=undefined){
+                    renderJson(m.input.json_data)
+                }
+                else if(m.input.record.Data!=undefined){
                     renderJson(m.input.record.Data)
                 }
             })

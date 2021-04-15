@@ -16,6 +16,7 @@
             Provider_Number, 
             Clinic_Address, 
             Phone,
+            Fax,
             Referrer_Name,
             Practitioner_ID
 
@@ -44,6 +45,10 @@
                     break;
                 case 'Phone':
                     var p=records[I].Data.referral.referrerLocation['phone']; if(p==undefined) p="";
+                    td.text(p);
+                    break;
+                case 'Fax':
+                    var p=records[I].Data.referral.referrerLocation['fax']; if(p==undefined) p="";
                     td.text(p);
                     break;
                 case 'Referrer_Name':

@@ -195,7 +195,6 @@
             parent_table:"communal-ordering",
             description:"Communal ordering received",
         },
-
         
 
         "lab-order-diagram":{
@@ -243,8 +242,10 @@
             description:"Sleep study",
             router:1,
         },
-        "mailchimp-api":{  url:$H+"/mailchimp/search.html",  router:1  },
-        "blackbaud-api":{  url:$H+"/blackbaud/search.html",  router:1  },
+        "mailchimp-api-data":{  url:$H+"/mailchimp/data.html",  Table:"mailchimp-api", form_module: 'mailchimp-api-form', router:1  },
+        "mailchimp-api-form":{  url:$H+"/mailchimp/form.html",  Table:"mailchimp-api" },
+        "blackbaud-api-data":{  url:$H+"/blackbaud/data.html",  Table:"blackbaud-api", form_module: 'blackbaud-api-form', router:1  },
+        "blackbaud-api-form":{  url:$H+"/blackbaud/form.html",  Table:"blackbaud-api" },
     }
     set_prefix(prefix,modules);
     //-------------------------------------------------------------------------------------
