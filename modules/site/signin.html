@@ -18,7 +18,7 @@
             (Accessing third party resources on behalf of you)
             <ul>
                 <li><a href='blackbaud'>Blackbaud</a> <span id=blackbaud_username></span> <a href='blackbaud_signout' style='display:none'>Sign Out</a> </li>
-                <li><a href='intuit'>Intuit</a></li>
+                <li><a href='intuit'>Intuit</a> <span id=intuit_username></span> <a href='intuit_signout' style='display:none'>Sign Out</a> </li>
                 <li><a href='mailchimp'>Mailchimp</a> <span id=mailchimp_username></span> <a href='mailchimp_signout' style='display:none'>Sign Out</a> </li>
                 <!--<li><a href='test'>Test</a></li>-->
             </ul>
@@ -101,8 +101,9 @@
                     window.open(url);
                 }
                 switch(href){
-                    case "mailchimp_signout":  sessionStorage.removeItem("mailchimp_oauth");  $('#mailchimp_username').text(''); $('a[href=mailchimp_signout]').hide(); break;
-                    case "blackbaud_signout":  sessionStorage.removeItem("blackbaud_oauth");  $('#blackbaud_username').text(''); $('a[href=blackbaud_signout]').hide(); break;
+                    case "mailchimp_signout":   sessionStorage.removeItem("mailchimp_oauth");   $('#mailchimp_username').text('');  $('a[href=mailchimp_signout]').hide(); break;
+                    case "blackbaud_signout":   sessionStorage.removeItem("blackbaud_oauth");   $('#blackbaud_username').text('');  $('a[href=blackbaud_signout]').hide(); break;
+                    case "intuit_signout":      sessionStorage.removeItem("intuit_oauth");      $('#intuit_username').text('');     $('a[href=intuit_signout]').hide(); break;
                     case "test": test(); break;
                 }
             })
@@ -132,6 +133,13 @@
                     var a=JSON.parse(sessionStorage.getItem("blackbaud_oauth"));
                     $('#blackbaud_username').text(a.given_name+" "+a.family_name); 
                 }
+                if(sessionStorage.getItem("intuit_oauth")!=null){ 
+                    $('a[href=intuit_signout]').show(); 
+                    var r=JSON.parse(sessionStorage.getItem("intuit_oauth"));
+                    if(r.b!=undefined){
+                        $('#intuit_username').text(r.b.givenName+" "+r.b.familyName); 
+                    }
+                }
             }
             //--------------------------------------------------------
             $('#D__ID').on('load',function(){
@@ -142,7 +150,8 @@
                 if (e.origin == window.location.origin) {
                     var cmd=e.data.cmd;
                     var code=e.data.code;
-                    if(code!=undefined && cmd!=undefined) $vm.exchange_token(cmd,code,u); 
+                    var href=e.data.href;
+                    if(code!=undefined && cmd!=undefined) $vm.exchange_token(cmd,code,u,href); 
                 }
             };
             //------------------------------------
@@ -155,6 +164,36 @@
                 $vm.groups=t.groups;
             }
             //------------------------------------          
+            $vm.exchange_token=function(cmd,token,redirect_uri,href){
+                $vm.request({cmd:cmd,token:token,redirect_uri:redirect_uri},function(res){
+                    if(res.status=='ok'){
+                        switch(cmd){
+                            case "exchange-microsoft-token":    sessionStorage.setItem("current_id_provider","microsoft"); process_identity(res); break;
+                            case "exchange-google-token":       sessionStorage.setItem("current_id_provider","google");    process_identity(res); break;
+                            case "exchange-facebook-token":     sessionStorage.setItem("current_id_provider","facebook");  process_identity(res); break;
+                            case "exchange-github-token":       sessionStorage.setItem("current_id_provider","github");    process_identity(res); break;
+                            case "exchange-mailchimp-token":
+                                sessionStorage.setItem("mailchimp_oauth",JSON.stringify(res.result));
+                                $vm.request({cmd:'mailchimp-api',access_token:res.result.access_token,path:"/3.0/",dc:"us3"},function(res){
+                                    sessionStorage.setItem("mailchimp_oauth_root",res.result);
+                                    login_display();
+                                })
+                                break;
+                            case "exchange-blackbaud-token":
+                                sessionStorage.setItem("blackbaud_oauth",JSON.stringify(res.result));
+                                break;
+                            case "exchange-intuit-token":
+                                res.result.href=href;
+alert(res.result);
+console.log(res.result)                               
+                                sessionStorage.setItem("intuit_oauth",JSON.stringify(res.result));
+                                break;
+                        }
+                        login_display();
+                    }
+                })
+            }
+            //------------------------------------
             var http_request=function(input,callback){
                 var p={}
                 for(a in input){
@@ -191,30 +230,6 @@
                    console.log(res);
 
                })
-            }
-            //------------------------------------
-            $vm.exchange_token=function(cmd,token,redirect_uri){
-                $vm.request({cmd:cmd,token:token,redirect_uri:redirect_uri},function(res){
-                    if(res.status=='ok'){
-                        switch(cmd){
-                            case "exchange-microsoft-token":    sessionStorage.setItem("current_id_provider","microsoft"); process_identity(res); break;
-                            case "exchange-google-token":       sessionStorage.setItem("current_id_provider","google");    process_identity(res); break;
-                            case "exchange-facebook-token":     sessionStorage.setItem("current_id_provider","facebook");  process_identity(res); break;
-                            case "exchange-github-token":       sessionStorage.setItem("current_id_provider","github");    process_identity(res); break;
-                            case "exchange-mailchimp-token":
-                                sessionStorage.setItem("mailchimp_oauth",JSON.stringify(res.result));
-                                $vm.request({cmd:'mailchimp-api',access_token:res.result.access_token,path:"/3.0/",dc:"us3"},function(res){
-                                    sessionStorage.setItem("mailchimp_oauth_root",res.result);
-                                    login_display();
-                                })
-                                break;
-                            case "exchange-blackbaud-token":
-                                sessionStorage.setItem("blackbaud_oauth",JSON.stringify(res.result));
-                                break;
-                        }
-                        login_display();
-                    }
-                })
             }
             //------------------------------------
         }

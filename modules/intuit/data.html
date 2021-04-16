@@ -1,0 +1,63 @@
+<div id=D__ID>
+    <div style='padding:3px 10px'>
+        <span style='color:black'>Path:</span> <input style='width: calc(100% - 220px)' type=text id=path__ID></input> <button type=button class="btn btn-secondary" id=go__ID>Send</button> <a target=_blank href=https://developer.intuit.com/app/developer/qbo/docs/api/accounting/most-commonly-used/account ><u>API Reference</u> </a>
+    </div>
+    <section>
+        VmInclude:__COMPONENT__/g/grid.01.html
+    </section>
+    
+    <script>
+        function F__ID(){
+            //-------------------------------------
+            //VmInclude:__COMPONENT__/g/grid.01.js
+            //-------------------------------------
+            var fields='ID|UID,Name,Path';
+            m.fields="_Form,_Request,"+fields+",Submit_date,Submitted_by,_Delete";
+            //-------------------------------------
+            var realmId="";
+            var get_token=function(){
+                var t=sessionStorage.getItem("intuit_oauth");
+                if(t==null){
+                    alert("You haven't login!");
+                    return "";
+                }
+                t=JSON.parse(t);
+                realmId=t.href.split("ealmId=").pop().split('&')[0];
+                return t.a.access_token;
+            }
+            //-------------------------------------
+            m.cell_render=function(records,I,field,td){
+                switch(field){
+                    case '_Request':
+                        td.html("<u style='cursor:pointer'>Send</u>");
+                        td.find('u').on('click',function(){
+                            var path=records[I].Data.Path.replace(/ /g,'%20');
+                            var t=get_token();
+                            if(t!="" && realmId!=""){
+                                var path2="/v3/company/"+realmId+path;
+                                $vm.request({cmd:'intuit-api',access_token:t,path:path2},function(res){
+                                    $vm.show_module('jsonv',{json_data:JSON.parse(res.result)})
+                                })
+                            }
+                        })
+                        break;
+                }
+            }
+            //-------------------------------------
+            $('#go__ID').on('click',function(){
+                var path=$('#path__ID').val().replace(/ /g,'%20');
+                var t=get_token();
+                if(t!="" && realmId!=""){
+                    var path2="/v3/company/"+realmId+path;
+                    $vm.request({cmd:'intuit-api',access_token:t,path:path2},function(res){
+                        $vm.show_module('jsonv',{json_data:JSON.parse(res.result)})
+                    })
+                }
+            })
+            //-------------------------------------
+        }
+    </script>
+    <style>
+        VmInclude:__COMPONENT__/g/grid.01.css
+    </style>
+</div>

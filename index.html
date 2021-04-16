@@ -13,11 +13,9 @@
         <script src="https://json-viewer.vmiis.com/json-viewer/jquery.json-viewer.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/opensheetmusicdisplay@0.9.4/build/opensheetmusicdisplay.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/osmd-audio-player/umd/OsmdAudioPlayer.min.js"></script>
-        <script src="https://alcdn.msauth.net/browser/2.8.0/js/msal-browser.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>   
         <script src="https://unpkg.com/html2canvas@1.0.0-rc.5/dist/html2canvas.js"></script>   
         <script>$vm={};</script>
-        <script src="microsoft\msal.js"></script>
     </head>
     <body>
         <div id=_g_vm_canvas style='position:absolute;top:-100000px'></div>
@@ -29,7 +27,7 @@
         <!----------------------------------------------->
         <script app code>
             //---------------------------------------------
-            $VmAPI={};$vm.ver=[0.25,0.01]; $vm['jquery-ui-min-js']=1;
+            $VmAPI={};$vm.ver=[0.26,0.01]; $vm['jquery-ui-min-js']=1;
             $vm.flexindex=new FlexSearch({  doc: {id: "id",field: ["title","contents"]}    });
             $vm.hosting_path=window.location.href.substring(0, window.location.href.split('?')[0].lastIndexOf('/'));
             //---------------------------------------------

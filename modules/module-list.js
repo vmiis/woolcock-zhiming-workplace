@@ -246,6 +246,8 @@
         "mailchimp-api-form":{  url:$H+"/mailchimp/form.html",  Table:"mailchimp-api" },
         "blackbaud-api-data":{  url:$H+"/blackbaud/data.html",  Table:"blackbaud-api", form_module: 'blackbaud-api-form', router:1  },
         "blackbaud-api-form":{  url:$H+"/blackbaud/form.html",  Table:"blackbaud-api" },
+        "intuit-api-data":{  url:$H+"/intuit/data.html",  Table:"intuit-api", form_module: 'intuit-api-form', router:1  },
+        "intuit-api-form":{  url:$H+"/intuit/form.html",  Table:"intuit-api" },
     }
     set_prefix(prefix,modules);
     //-------------------------------------------------------------------------------------
