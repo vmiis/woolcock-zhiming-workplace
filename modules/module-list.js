@@ -248,6 +248,8 @@
         "blackbaud-api-form":{  url:$H+"/blackbaud/form.html",  Table:"blackbaud-api" },
         "intuit-api-data":{  url:$H+"/intuit/data.html",  Table:"intuit-api", form_module: 'intuit-api-form', router:1  },
         "intuit-api-form":{  url:$H+"/intuit/form.html",  Table:"intuit-api" },
+        "microsoft-api-data":{  url:$H+"/microsoft/data.html",  Table:"microsoft-api", form_module: 'microsoft-api-form', router:1  },
+        "microsoft-api-form":{  url:$H+"/microsoft/form.html",  Table:"microsoft-api" },
     }
     set_prefix(prefix,modules);
     //-------------------------------------------------------------------------------------

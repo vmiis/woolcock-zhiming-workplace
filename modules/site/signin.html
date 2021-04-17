@@ -20,6 +20,7 @@
                 <li><a href='blackbaud'>Blackbaud</a> <span id=blackbaud_username></span> <a href='blackbaud_signout' style='display:none'>Sign Out</a> </li>
                 <li><a href='intuit'>Intuit</a> <span id=intuit_username></span> <a href='intuit_signout' style='display:none'>Sign Out</a> </li>
                 <li><a href='mailchimp'>Mailchimp</a> <span id=mailchimp_username></span> <a href='mailchimp_signout' style='display:none'>Sign Out</a> </li>
+                <li><a href='microsoft2'>Microsoft</a> <span id=microsoft_username></span> <a href='microsoft_signout' style='display:none'>Sign Out</a> </li>
                 <!--<li><a href='test'>Test</a></li>-->
             </ul>
         </div>
@@ -38,10 +39,13 @@
                 var url="";
                 if(href=="microsoft"){
                     url='https://login.microsoftonline.com/common/oauth2/v2.0/authorize';
-                    url+='?client_id=f39f8959-8cd7-4570-8c0f-548306bf899a';
+                    //url="https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize";
+                    //url+='?client_id=f39f8959-8cd7-4570-8c0f-548306bf899a';
+                    url+='?client_id=3bcb40c5-fec0-4b3b-ba67-f4d46d577f97';
                     url+='&response_type=code';
                     url+='&redirect_uri='+u;
-                    url+='&scope=openid user.read profile';
+                    url+='&scope=https://woolcockdev.crm6.dynamics.com/.default'; 
+                    //url+='&scope=openid user.read profile'; 
                     url+='&response_mode=fragment';
                     url+='&state=exchange-microsoft-token';
                     url+='&nonce=678910';
@@ -100,10 +104,22 @@
                     url+='&state=exchange-mailchimp-token';
                     window.open(url);
                 }
+                if(href=="microsoft2"){
+                    url='https://login.microsoftonline.com/common/oauth2/v2.0/authorize';
+                    url+='?client_id=f39f8959-8cd7-4570-8c0f-548306bf899a';
+                    url+='&response_type=code';
+                    url+='&redirect_uri='+u;
+                    url+='&scope=openid user.read profile';
+                    url+='&response_mode=fragment';
+                    url+='&state=exchange-microsoft2-token';
+                    url+='&nonce=678910';
+                    window.open(url);
+                }
                 switch(href){
                     case "mailchimp_signout":   sessionStorage.removeItem("mailchimp_oauth");   $('#mailchimp_username').text('');  $('a[href=mailchimp_signout]').hide(); break;
                     case "blackbaud_signout":   sessionStorage.removeItem("blackbaud_oauth");   $('#blackbaud_username').text('');  $('a[href=blackbaud_signout]').hide(); break;
                     case "intuit_signout":      sessionStorage.removeItem("intuit_oauth");      $('#intuit_username').text('');     $('a[href=intuit_signout]').hide(); break;
+                    case "microsoft_signout":   sessionStorage.removeItem("microsoft_oauth");   $('#microsoft_username').text('');  $('a[href=microsoft_signout]').hide(); break;
                     case "test": test(); break;
                 }
             })
@@ -138,6 +154,13 @@
                     var r=JSON.parse(sessionStorage.getItem("intuit_oauth"));
                     if(r.b!=undefined){
                         $('#intuit_username').text(r.b.givenName+" "+r.b.familyName); 
+                    }
+                }
+                if(sessionStorage.getItem("microsoft_oauth")!=null){ 
+                    $('a[href=microsoft_signout]').show(); 
+                    var r=JSON.parse(sessionStorage.getItem("microsoft_oauth"));
+                    if(r.d!=undefined){
+                        $('#microsoft_username').text(r.d.payload.name); 
                     }
                 }
             }
@@ -184,9 +207,10 @@
                                 break;
                             case "exchange-intuit-token":
                                 res.result.href=href;
-alert(res.result);
-console.log(res.result)                               
                                 sessionStorage.setItem("intuit_oauth",JSON.stringify(res.result));
+                                break;
+                            case "exchange-microsoft2-token":
+                                sessionStorage.setItem("microsoft_oauth",JSON.stringify(res.result));
                                 break;
                         }
                         login_display();
