@@ -15,7 +15,7 @@
                 <li><i class="fab fa-github"></i> <a href='github'>GitHub</a> <span id=github_email></span></li>
             </ul>
             <span class=label__ID>Resources</span>
-            (Accessing third party resources on behalf of you)
+            (Get or refresh access token, accessing third party resources on behalf of you)
             <ul>
                 <li><a href='blackbaud'>Blackbaud</a> <span id=blackbaud_username></span> <a href='blackbaud_signout' style='display:none'>Sign Out</a> </li>
                 <li><a href='intuit'>Intuit</a> <span id=intuit_username></span> <a href='intuit_signout' style='display:none'>Sign Out</a> </li>
@@ -41,11 +41,11 @@
                     url='https://login.microsoftonline.com/common/oauth2/v2.0/authorize';
                     //url="https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize";
                     //url+='?client_id=f39f8959-8cd7-4570-8c0f-548306bf899a';
-                    url+='?client_id=3bcb40c5-fec0-4b3b-ba67-f4d46d577f97';
+                    url+='?client_id=3bcb40c5-fec0-4b3b-ba67-f4d46d577f97'; //woolcock
                     url+='&response_type=code';
                     url+='&redirect_uri='+u;
-                    url+='&scope=https://woolcockdev.crm6.dynamics.com/.default'; 
-                    //url+='&scope=openid user.read profile'; 
+                    //url+='&scope=https://woolcockdev.crm6.dynamics.com/.default'; 
+                    url+='&scope=openid user.read profile'; 
                     url+='&response_mode=fragment';
                     url+='&state=exchange-microsoft-token';
                     url+='&nonce=678910';
@@ -106,10 +106,12 @@
                 }
                 if(href=="microsoft2"){
                     url='https://login.microsoftonline.com/common/oauth2/v2.0/authorize';
-                    url+='?client_id=f39f8959-8cd7-4570-8c0f-548306bf899a';
+                    //url+='?client_id=f39f8959-8cd7-4570-8c0f-548306bf899a';
+                    url+='?client_id=3bcb40c5-fec0-4b3b-ba67-f4d46d577f97'; //woolcock
                     url+='&response_type=code';
                     url+='&redirect_uri='+u;
-                    url+='&scope=openid user.read profile';
+                    url+='&scope=https://woolcockdev.crm6.dynamics.com/.default'; 
+                    //url+='&scope=openid user.read profile';
                     url+='&response_mode=fragment';
                     url+='&state=exchange-microsoft2-token';
                     url+='&nonce=678910';

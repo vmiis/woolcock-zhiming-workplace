@@ -52,8 +52,13 @@
                     td.text(p);
                     break;
                 case 'Referrer_Name':
-                    var v=records[I].Data.referral.referrerLocation['referrer_name']; if(v==undefined) v="";
-                    td.text(v);
+                    if(records[I].Data.referral.referrerLocation['firstName']!=undefined){
+                        td.text(records[I].Data.referral.referrerLocation['firstName']+" "+records[I].Data.referral.referrerLocation['lastName']);
+                    }
+                    else{
+                        var v=records[I].Data.referral.referrerLocation['referrer_name']; if(v==undefined) v="";
+                        td.text(v);
+                    }
                     break;
                 case 'Practitioner_ID':
                     var v=records[I].Data.referral.practitionerId; if(v==undefined) v="";

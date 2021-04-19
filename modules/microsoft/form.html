@@ -7,15 +7,26 @@
     		<div class="container">
     			<div>
 					<div w='100|100'>
-    					<span>Name</span>
+    					<span>Name:</span>
     					<input type="text" class="form-control" name=Name />
     				</div>
     			</div>
     			<div>
 					<div w='100|100'>
-    					<span>Path</span>
-						<div name=Path contenteditable="true" style='min-height:30px'>
-						</div>    				
+    					<span>Path:</span>
+						<textarea name=Path style='height:300px' class="form-control"></textarea>
+					</div>
+    			</div>
+    			<div>
+					<div w='100|100'>
+    					<span>Array:</span>
+						<input type=text name=Array class="form-control" />
+					</div>
+    			</div>
+    			<div>
+					<div w='100|100'>
+    					<span>Columns:</span>
+						<textarea name=Columns style='height:300px' class="form-control"></textarea>
 					</div>
     			</div>
     			<br>
@@ -35,19 +46,6 @@
 			new ResizeObserver($vm.responsive).observe(form_container__ID);
 			m.storage_type='s0';
     		//-------------------------------------
-			var old_m_load=m.load;
-			m.load=function(){
-				old_m_load();
-				if(m.input && m.input.record){
-					var c=m.input.record.Data.Path;
-					$('#F__ID div[name=Path]').html($vm.contenteditable_filter(c));
-				}
-			}
-            m.before_submit=function(data,index){
-				data.Path=$('#F__ID div[name=Path]').html();
-				return true;
-            }
-			//-------------------------------------
     	}
     </script>
     <style>

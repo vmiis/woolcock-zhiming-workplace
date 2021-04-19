@@ -1,6 +1,6 @@
 <div id=D__ID>
     <div style='padding:3px 10px'>
-        <span style='color:black'>Path:</span> <input style='width: calc(100% - 220px)' type=text id=path__ID></input> <button type=button class="btn btn-secondary" id=go__ID>Send</button> <a target=_blank href=https://developer.blackbaud.com/skyapi/apis ><u>API Reference</u> </a>
+        <span style='color:black'>Path:</span> <input style='width: calc(100% - 220px)' type=text id=path__ID></input> <button type=button class="btn btn-secondary" id=go__ID>Send</button> <a target=_blank href=https://docs.microsoft.com/en-us/powerapps/developer/data-platform/webapi/query-data-web-api ><u>Web API</u> </a>
     </div>
     <section>
         VmInclude:__COMPONENT__/g/grid.01.html
@@ -11,8 +11,10 @@
             //-------------------------------------
             //VmInclude:__COMPONENT__/g/grid.01.js
             //-------------------------------------
-            var fields='ID|UID,Name,Path';
+            var fields='ID|UID,Name';
             m.fields="_Form,_Request,"+fields+",Submit_date,Submitted_by,_Delete";
+            //-------------------------------------
+            var host='woolcock.crm6.dynamics.com';
             //-------------------------------------
             var get_token=function(){
                 var t=sessionStorage.getItem("microsoft_oauth");
@@ -21,7 +23,14 @@
                     return "";
                 }
                 t=JSON.parse(t);
-                return t.a.access_token;
+                var access_token=t.a.access_token;
+                var dt=$vm.jwt_decode(access_token);
+                var exp=dt.exp;
+                if(Date.now() >= exp * 1000){
+                    alert("Microsoft access token is expired! Please refresh.");
+                    return;
+                }
+                return access_token;
             }
             //-------------------------------------
             m.cell_render=function(records,I,field,td){
@@ -29,17 +38,29 @@
                     case '_Request':
                         td.html("<u style='cursor:pointer'>Send</u>");
                         td.find('u').on('click',function(){
-                            var path=records[I].Data.Path;
-                            var t=sessionStorage.getItem("blackbaud_oauth");
-                            if(t==null){
-                                alert("You haven't login!");
-                                return;
+                            var t=get_token();
+                            if(t!=""){
+                                var name=records[I].Data.Name;
+                                var path=records[I].Data.Path;
+                                var array=records[I].Data.Array;
+                                var columns=records[I].Data.Columns;
+                                path=path.replace(/ /g,'%20');
+                                path=path.replace(/\n/g,'').replace(/\r/g,'');
+                                $vm.request({cmd:'microsoft-api',access_token:t,host:host,path:path},function(res){
+                                    var v=res.result;
+                                    if(res.status=="err"){
+                                        $vm.show_module('jsonv',{json_data:v})
+                                    }
+                                    else if(array!=""){
+                                        var type=columns.indexOf('|');
+                                        if(type!=-1) $vm.show_module('gridv',{name:name,json_data:JSON.parse(v),array:array,columns:columns})
+                                        else $vm.show_module('arrayv',{name:name,json_data:JSON.parse(v),array:array,columns:columns})
+                                    }
+                                    else{
+                                        $vm.show_module('jsonv',{json_data:JSON.parse(v)})
+                                    }
+                                })
                             }
-                            t=JSON.parse(t);
-                            t=t.access_token;
-                            $vm.request({cmd:'blackbaud-api',access_token:t,path:path},function(res){
-                                $vm.show_module('jsonv',{json_data:JSON.parse(res.result)})
-                            })
                         })
                         break;
                 }
@@ -48,10 +69,16 @@
             $('#go__ID').on('click',function(){
                 var t=get_token();
                 if(t!=""){
-                    var host='woolcock.crm6.dynamics.com';
-                    var path='/api/data/v9.1/woolcock_projectses?$count=true&$expand=createdby($select=fullname)&$orderby=createdon%20desc';//+$filter;
-                    $vm.request({cmd:'microsoft-api',access_token:t,host:host, path:path},function(res){
-                        $vm.show_module('jsonv',{json_data:JSON.parse(res.result)})
+                    var path=$('#path__ID').val();
+                    path=path.replace(/ /g,'%20');
+                    path=path.replace(/\n/g,'').replace(/\r/g,'');
+                    $vm.request({cmd:'microsoft-api',access_token:t,host:host,path:path},function(res){
+                        var v=res.result;
+                        try {
+                            $vm.show_module('jsonv',{json_data:JSON.parse(v)})
+                        } catch (e) {
+                            $vm.show_module('jsonv',{json_data:v})
+                        }
                     })
                 }
             })
