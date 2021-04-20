@@ -146,7 +146,8 @@
                             
                             case "exchange-mailchimp-token":
                                 sessionStorage.setItem("mailchimp_oauth",JSON.stringify(res.result));
-                                $vm.request({cmd:'mailchimp-api',access_token:res.result.access_token,path:"/3.0/",dc:"us3"},function(res){
+                                var host='us3.api.mailchimp.com';
+                                $vm.request({cmd:'mailchimp-api',access_token:res.result.access_token,host:host,path:"/3.0/"},function(res){
                                     sessionStorage.setItem("mailchimp_oauth_root",JSON.stringify(res.result));
                                     login_display();
                                 })

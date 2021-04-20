@@ -5,7 +5,7 @@ var mailchimp_query=function(UID){
         return "";
     }
     t=JSON.parse(t);
-    var access_token=t.a.access_token;
+    var access_token=t.access_token;
     $vm.request({cmd:"find",table:"mailchimp-api",query:{UID:UID},options:{}},function(res){
         var records=res.result;
         if(records!=undefined && records.length==1){
