@@ -126,6 +126,47 @@
                 }
             })
             //--------------------------------------------------------
+            window.onmessage=function(e){
+                if (e.origin == window.location.origin) {
+                    var cmd=e.data.cmd;
+                    var code=e.data.code;
+                    var href=e.data.href;
+                    if(code!=undefined && cmd!=undefined) $vm.exchange_token(cmd,code,u,href); 
+                }
+            };
+            //------------------------------------
+            $vm.exchange_token=function(cmd,token,redirect_uri,href){
+                $vm.request({cmd:cmd,token:token,redirect_uri:redirect_uri},function(res){
+                    if(res.status=='ok'){
+                        switch(cmd){
+                            case "exchange-microsoft-token":    sessionStorage.setItem("current_id_provider","microsoft"); process_identity(res); break;
+                            case "exchange-google-token":       sessionStorage.setItem("current_id_provider","google");    process_identity(res); break;
+                            case "exchange-facebook-token":     sessionStorage.setItem("current_id_provider","facebook");  process_identity(res); break;
+                            case "exchange-github-token":       sessionStorage.setItem("current_id_provider","github");    process_identity(res); break;
+                            
+                            case "exchange-mailchimp-token":
+                                sessionStorage.setItem("mailchimp_oauth",JSON.stringify(res.result));
+                                $vm.request({cmd:'mailchimp-api',access_token:res.result.access_token,path:"/3.0/",dc:"us3"},function(res){
+                                    sessionStorage.setItem("mailchimp_oauth_root",JSON.stringify(res.result));
+                                    login_display();
+                                })
+                                break;
+                            case "exchange-blackbaud-token":
+                                sessionStorage.setItem("blackbaud_oauth",JSON.stringify(res.result));
+                                break;
+                            case "exchange-intuit-token":
+                                res.result.href=href;
+                                sessionStorage.setItem("intuit_oauth",JSON.stringify(res.result));
+                                break;
+                            case "exchange-microsoft2-token":
+                                sessionStorage.setItem("microsoft_oauth",JSON.stringify(res.result));
+                                break;
+                        }
+                        login_display();
+                    }
+                })
+            }
+            //------------------------------------
             var login_display=function(){
                 $('#microsoft_email').text('');
                 $('#google_email').text('');
@@ -171,15 +212,6 @@
                 login_display();
             })
             //--------------------------------------------------------
-            window.onmessage=function(e){
-                if (e.origin == window.location.origin) {
-                    var cmd=e.data.cmd;
-                    var code=e.data.code;
-                    var href=e.data.href;
-                    if(code!=undefined && cmd!=undefined) $vm.exchange_token(cmd,code,u,href); 
-                }
-            };
-            //------------------------------------
             var process_identity=function(res){
                 $vm.user_name=res.result.user_name;
                 $vm.displayname=res.result.displayname;
@@ -189,38 +221,6 @@
                 $vm.groups=t.groups;
             }
             //------------------------------------          
-            $vm.exchange_token=function(cmd,token,redirect_uri,href){
-                $vm.request({cmd:cmd,token:token,redirect_uri:redirect_uri},function(res){
-                    if(res.status=='ok'){
-                        switch(cmd){
-                            case "exchange-microsoft-token":    sessionStorage.setItem("current_id_provider","microsoft"); process_identity(res); break;
-                            case "exchange-google-token":       sessionStorage.setItem("current_id_provider","google");    process_identity(res); break;
-                            case "exchange-facebook-token":     sessionStorage.setItem("current_id_provider","facebook");  process_identity(res); break;
-                            case "exchange-github-token":       sessionStorage.setItem("current_id_provider","github");    process_identity(res); break;
-                            
-                            case "exchange-mailchimp-token":
-                                sessionStorage.setItem("mailchimp_oauth",JSON.stringify(res.result));
-                                $vm.request({cmd:'mailchimp-api',access_token:res.result.access_token,path:"/3.0/",dc:"us3"},function(res){
-                                    sessionStorage.setItem("mailchimp_oauth_root",res.result);
-                                    login_display();
-                                })
-                                break;
-                            case "exchange-blackbaud-token":
-                                sessionStorage.setItem("blackbaud_oauth",JSON.stringify(res.result));
-                                break;
-                            case "exchange-intuit-token":
-                                res.result.href=href;
-                                sessionStorage.setItem("intuit_oauth",JSON.stringify(res.result));
-                                break;
-                            case "exchange-microsoft2-token":
-                                sessionStorage.setItem("microsoft_oauth",JSON.stringify(res.result));
-                                break;
-                        }
-                        login_display();
-                    }
-                })
-            }
-            //------------------------------------
             var http_request=function(input,callback){
                 var p={}
                 for(a in input){
