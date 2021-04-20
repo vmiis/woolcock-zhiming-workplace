@@ -197,6 +197,7 @@
                             case "exchange-google-token":       sessionStorage.setItem("current_id_provider","google");    process_identity(res); break;
                             case "exchange-facebook-token":     sessionStorage.setItem("current_id_provider","facebook");  process_identity(res); break;
                             case "exchange-github-token":       sessionStorage.setItem("current_id_provider","github");    process_identity(res); break;
+                            
                             case "exchange-mailchimp-token":
                                 sessionStorage.setItem("mailchimp_oauth",JSON.stringify(res.result));
                                 $vm.request({cmd:'mailchimp-api',access_token:res.result.access_token,path:"/3.0/",dc:"us3"},function(res){
