@@ -42,6 +42,11 @@
                             if(t!=""){
                                 var name=records[I].Data.Name;
                                 var path=records[I].Data.Path;
+                                if(path.indexOf('[INPUT]')!=-1){
+                                    var p=prompt("Input", "");
+                                    if(p==null) return;
+                                    path=path.replace('[INPUT]',p);
+                                }
                                 var array=records[I].Data.Array;
                                 var columns=records[I].Data.Columns;
                                 path=path.replace(/ /g,'%20');

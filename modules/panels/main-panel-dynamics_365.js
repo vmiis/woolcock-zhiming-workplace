@@ -18,6 +18,11 @@ var dynamics_365_query=function(UID){
             var host='woolcock.crm6.dynamics.com';
             var name=records[0].Data.Name;
             var path=records[0].Data.Path;
+            if(path.indexOf('[INPUT]')!=-1){
+                var p=prompt("Input", "");
+                if(p==null) return;
+                path=path.replace('[INPUT]',p);
+            }
             var array=records[0].Data.Array;
             var columns=records[0].Data.Columns;
             path=path.replace(/ /g,'%20');

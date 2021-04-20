@@ -23,8 +23,8 @@
                 <li><a href='?/coreplus-datatable-relationships'>Coreplus datatable relationships</a></li>
                 <li><a href='?/coreplus-referral-diagram'>Referral data example</a></li>
             <span class=LT__ID>Dynamics CRM</span>
-                <li><a href='?/crm-volunteer-data'>Volunteers</a></li>
                 <!--
+                <li><a href='?/crm-volunteer-data'>Volunteers</a></li>
                 <li><a href='?/crm-project-data'>Projects</a></li>
                 <li><a href='?/crm-study-data'>Studies</a></li>
                 -->
@@ -32,6 +32,11 @@
                 <li><a href='?/api_dynamics_4'>Latest 200 stuties</a></li>
                 <li><a href='?/api_dynamics_2'>Latest 200 projects</a></li>
                 <li><a href='?/api_dynamics_3'>Total number of volunteers, projects and studies</a></li>
+                <li><a href='?/api_dynamics_6'>Search volunteers by name</a></li>
+                <li><a href='?/api_dynamics_1'>Search projects</a></li>
+            <span class=LT__ID>Mailchimp Marketing</span>
+                <li><a href='?/api_mailchimp_1'>Woolcock campaign list</a></li>
+                <li><a href='?/api_mailchimp_2'>Search audience</a></li>
             <span class=LT__ID>CMS</span>
                 <li><a href='?/cms-sleep-study'>Sleep studies</a></li>
             <span class=LT__ID style='break-before:column;display:block;'>ThankQ Database</span>
@@ -138,17 +143,16 @@
                     var aa=module_name.split('_');
                     if(aa.length==3){
                         switch(aa[1]){
-                            case "dynamics": dynamics_365_query(parseInt(aa[2])); break;
+                            case "dynamics":  dynamics_365_query(parseInt(aa[2])); break;
+                            case "mailchimp": mailchimp_query(parseInt(aa[2])); break;
                         }
                     }
                 }
                 else if(module_name!="") $vm.show_module(module_name,{})
             })
             //--------------------------------------------------------
-			//VmInclude:__CURRENT_PATH__dynamics_365_query.js
-            
-            /*
-            */
+			//VmInclude:__CURRENT_PATH__main-panel-dynamics_365.js
+			//VmInclude:__CURRENT_PATH__main-panel-mailchimp.js
             //--------------------------------------------------------
             
         }

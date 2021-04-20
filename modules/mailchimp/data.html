@@ -11,43 +11,81 @@
             //-------------------------------------
             //VmInclude:__COMPONENT__/g/grid.01.js
             //-------------------------------------
-            var fields='ID|UID,Name,Path';
+            var fields='ID|UID,Name';
             m.fields="_Form,_Request,"+fields+",Submit_date,Submitted_by,_Delete";
+            //-------------------------------------
+            var host='us3.api.mailchimp.com';
+            //-------------------------------------
+            var get_token=function(){
+                var t=sessionStorage.getItem("mailchimp_oauth");
+                if(t==null){
+                    alert("You haven't login!");
+                    return "";
+                }
+                t=JSON.parse(t);
+                var access_token=t.a.access_token;
+                return access_token;
+            }
             //-------------------------------------
             m.cell_render=function(records,I,field,td){
                 switch(field){
                     case '_Request':
                         td.html("<u style='cursor:pointer'>Send</u>");
                         td.find('u').on('click',function(){
-                            var path=records[I].Data.Path;
-                            var t=sessionStorage.getItem("mailchimp_oauth");
-                            if(t==null){
-                                alert("You haven't login!");
-                                return;
+                            var t=get_token();
+                            if(t!=""){
+                                var path=records[I].Data.Path;
+                                var array=records[I].Data.Array;
+                                var columns=records[I].Data.Columns;
+                                if(path.indexOf('[INPUT]')!=-1){
+                                    var p=prompt("Input", "");
+                                    if(p==null) return;
+                                    path=path.replace('[INPUT]',p);
+                                }
+                                $vm.request({cmd:'mailchimp-api',access_token:t,host:host,path:"/3.0"+path},function(res){
+                                    var v={};
+                                    try{
+                                        v=JSON.parse(res.result);
+                                    }
+                                    catch(e){
+                                        $vm.show_module('jsonv',{json_data:{err:v}});
+                                        return;
+                                    }
+                                    if(array!=""){
+                                        var type=columns.indexOf('|');
+                                        if(type!=-1) $vm.show_module('gridv',{name:name,json_data:v,array:array,columns:columns})
+                                        else $vm.show_module('arrayv',{name:name,json_data:v,array:array,columns:columns})
+                                    }
+                                    else{
+                                        $vm.show_module('jsonv',{json_data:v})
+                                    }
+                                })
                             }
-                            t=JSON.parse(t);
-                            t=t.access_token;
-                            $vm.request({cmd:'mailchimp-api',access_token:t,path:"/3.0"+path,dc:"us3"},function(res){
-                                $vm.show_module('jsonv',{json_data:JSON.parse(res.result)})
-                            })
                         })
                         break;
                 }
             }
             //-------------------------------------
             $('#go__ID').on('click',function(){
-                var t=sessionStorage.getItem("mailchimp_oauth");
-                if(t==null){
-                    alert("You haven't login!");
-                    return;
+                var t=get_token();
+                if(t!=""){
+                    var path=$('#path__ID').val();
+                    path=path.replace(/ /g,'%20');
+                    path=path.replace(/\n/g,'').replace(/\r/g,'');
+                    $vm.request({cmd:'mailchimp-api',access_token:t,host:host,path:"/3.0"+path},function(res){
+                        var v={};
+                        try{
+                            v=JSON.parse(res.result);
+                        }
+                        catch(e){
+                            $vm.show_module('jsonv',{json_data:{err:v}});
+                            return;
+                        }
+                        $vm.show_module('jsonv',{json_data:v})
+                    })
                 }
-                t=JSON.parse(t);
-                t=t.access_token;
-                var path=$('#path__ID').val();
-                $vm.request({cmd:'mailchimp-api',access_token:t,path:"/3.0"+path,dc:"us3"},function(res){
-                    $vm.show_module('jsonv',{json_data:JSON.parse(res.result)})
-                })
             })
+            //-------------------------------------
         }
     </script>
     <style>

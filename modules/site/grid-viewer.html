@@ -31,14 +31,24 @@
                 ps=[];                
                 records=[];                
                 try{
-                    var rows=json_data[array];
+                    var rows;
+                    var hh=array.split('.');
+                    if(hh.length==1) rows=json_data[array];
+                    else{
+                        rows=json_data;
+                        for(var h=0;h<hh.length;h++){
+                            rows=rows[hh[h]];
+                        }
+                    }
                     var aa=columns.split('\n');
                     for(var i=0; i<aa.length;i++){
                         var bb=aa[i].split('|');
-                        var nm=bb[0];
-                        var pp=bb[1];
-                        headers.push(nm);
-                        ps.push(pp.replace('\r',''));
+                        if(bb[0].length>3){
+                            var nm=bb[0];
+                            var pp=bb[1];
+                            headers.push(nm);
+                            ps.push(pp.replace('\r',''));
+                        }
                     }
                     for(var i=0;i<rows.length;i++){
                         var record={};
