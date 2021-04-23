@@ -1,8 +1,9 @@
-<div id=D__ID>
+﻿<div id=D__ID>
 	<div id=toolbar__ID class="navbar navbar-default">
 	    	<div>
-				<button id=export__ID type=button class="btn btn-secondary" title='Export' style='margin-right:30px'>Export</button>
-                <span id=name__ID style='margin-right:50px'></span> Total Number of records: <span id=total__ID></span>
+                <button id=p__ID type=button class="btn btn-secondary" title="Previous page"><i class="fa fa-arrow-left"></i></button>
+                <button id=n__ID type=button class="btn btn-secondary" title="Next page"><i class="fa fa-arrow-right"></i></button>
+            <span id=name__ID style='margin-right:50px'></span> Total Number of records: <span id=total__ID></span>
 			</div>
     </div>
     <div>
@@ -13,7 +14,7 @@
             //-------------------------------------------------
             var m=$vm.module_list['__MODULE__'];
             //-------------------------------------------------
-            var name="";
+            var name,path,array,columns;
             var headers=[];
             var ps=[];                
             var records=[];
@@ -22,11 +23,87 @@
                 if(records!=[]) $vm.download_csv(name+".csv",records);
             })
             //-------------------------------------------------
+            var host='woolcock.crm6.dynamics.com';
+            //-------------------------------------
+            var get_token=function(){
+                var t=sessionStorage.getItem("microsoft_oauth");
+                if(t==null){
+                    alert("You haven't login!");
+                    return "";
+                }
+                t=JSON.parse(t);
+                var access_token=t.a.access_token;
+                var dt=$vm.jwt_decode(access_token);
+                var exp=dt.exp;
+                if(Date.now() >= exp * 1000){
+                    alert("Microsoft access token is expired! Please refresh.");
+                    return "";
+                }
+                return access_token;
+            }
+            //-------------------------------------
+            m.next_link='';
+            m.link='';
+            m.links=[];
+            //-------------------------------------
+            $("#p__ID").off('click').on('click',function(){
+                pageI--; if(pageI<0){ pageI=0; return;}
+                m.links.pop();
+                m.link=m.links.pop();
+                request_data();
+            })
+            //-------------------------------------
+            $("#n__ID").off('click').on('click',function(){
+                pageI++; if(pageI>m.max_I){ pageI=m.max_I; return;}
+                m.link=m.next_link;
+                request_data();
+            })
+            //-------------------------------------
+            var pageI=0;
+            var pagesize=30;
+            //-------------------------------------
             $('#D__ID').on('load',function(){
-                var json_data=m.input.json_data
-                var array=m.input.array
-                var columns=m.input.columns
+                m.next_link='';
+                m.link='';
+                m.links=[];
+                pageI=0;
                 name=m.input.name;
+                path=m.input.path
+                array=m.input.array
+                columns=m.input.columns
+                if(path.indexOf('[INPUT]')!=-1){
+                    var p=prompt("Input", "");
+                    if(p==null) return;
+                    path=path.replace('[INPUT]',p);
+                }
+                path=path.replace(/ /g,'%20');
+                path=path.replace(/\n/g,'').replace(/\r/g,'');
+                request_data();
+            })
+            //-------------------------------------
+            var request_data=function(){
+                var t=get_token();
+                if(t!=""){
+                    var pt=path;
+                    if(m.link!='') pt=m.link;
+                    $vm.request({cmd:'microsoft-api',access_token:t,host:host,path:pt,pagesize:30},function(res){
+                        if(res.status=="err"){
+                            $vm.show_module('jsonv',{json_data:res.result})
+                        }
+                        else{
+                            render(res.result,array,columns);
+                        }
+                    })
+                }
+            }
+            //-------------------------------------
+            var render=function(c){
+                var json_data=JSON.parse(c);
+                console.log(json_data)                
+                
+                m.next_link=json_data['@odata.nextLink'];
+                m.links.push(m.link);
+                
                 $('#name__ID').text(name);
                 headers=[];
                 ps=[];                
@@ -94,7 +171,7 @@
                 }
                 txt+="</tr>"
                 for(var i=0;i<records.length;i++){
-                    txt+="<tr><td>"+(i+1)+"</td><td><i class='fa fa-pencil-square-o' i="+i+"></i></td>"
+                    txt+="<tr><td>"+(pageI*pagesize+i+1)+"</td><td><i class='fa fa-pencil-square-o' i="+i+"></i></td>"
                     for(var j=0;j<N;j++){
                         //txt+="<td>"+records[i][j]+"</td>";
                         txt+="<td>"+records[i][headers[j]]+"</td>";
@@ -107,8 +184,10 @@
                     $vm.show_module('jsonv',{json_data:rows[i]})
                 });
 
-                $('#total__ID').text(records.length);
-            })
+                var N=json_data['@odata.count'];
+                $('#total__ID').text(N);
+                m.max_I=Math.ceil(N/pagesize)-1;
+            }
             //-------------------------------------------------
         }
     </script>

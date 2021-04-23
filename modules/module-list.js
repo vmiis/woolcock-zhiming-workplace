@@ -250,6 +250,10 @@
         "intuit-api-form":{  url:$H+"/intuit/form.html",  Table:"intuit-api" },
         "microsoft-api-data":{  url:$H+"/microsoft/data.html",  Table:"microsoft-api", form_module: 'microsoft-api-form', router:1  },
         "microsoft-api-form":{  url:$H+"/microsoft/form.html",  Table:"microsoft-api" },
+        "mongodb-api-data":{  url:$H+"/mongodb/data.html",  Table:"mongodb-api", form_module: 'mongodb-api-form', router:1  },
+        "mongodb-api-form":{  url:$H+"/mongodb/form.html",  Table:"mongodb-api" },
+        
+        "microsoft-data":{url:$vm.hosting_path+"/modules/microsoft/microsoft-data.html",form_module:"jsonv"},
     }
     set_prefix(prefix,modules);
     //-------------------------------------------------------------------------------------

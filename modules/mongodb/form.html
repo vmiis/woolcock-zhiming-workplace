@@ -1,0 +1,70 @@
+<div id=D__ID>
+    <section id=form_container__ID>
+    	<div id=header__ID>
+    		API
+    	</div>
+    	<form id=F__ID>
+    		<div class="container">
+    			<div>
+					<div w='100|100'>
+    					<span>Name:</span>
+    					<input type="text" class="form-control" name=Name />
+    				</div>
+    			</div>
+    			<div>
+					<div w='100|100'>
+    					<span>Table:</span>
+    					<input type="text" class="form-control" name=Table />
+    				</div>
+    			</div>
+    			<div>
+					<div w='100|100'>
+    					<span>Command:</span>
+    					<input type="text" class="form-control" name=Command />
+    				</div>
+    			</div>
+    			<div>
+					<div w='100|100'>
+    					<span>Query:</span>
+						<textarea name=Query style='height:300px' class="form-control"></textarea>
+					</div>
+    			</div>
+    			<div>
+					<div w='100|100'>
+    					<span>Array:</span>
+						<input type=text name=Array class="form-control" />
+					</div>
+    			</div>
+    			<div>
+					<div w='100|100'>
+    					<span>Columns:</span>
+						<textarea name=Columns style='height:300px' class="form-control"></textarea>
+					</div>
+    			</div>
+    			<br>
+				<div>
+					<div w='100|100'>
+						<button id=submit__ID class="btn btn-secondary">Submit</button>
+					</div>
+				</div>
+			</div>
+    	</form>
+    </section>
+	VmInclude:__COMPONENT__/m/model.01.html
+    <script>
+    	function F__ID(){
+    		//-------------------------------------
+            VmInclude:__COMPONENT__/f/form.01.js
+			new ResizeObserver($vm.responsive).observe(form_container__ID);
+			m.storage_type='s0';
+    		//-------------------------------------
+    	}
+    </script>
+    <style>
+		VmInclude:__CURRENT_PATH__style.css
+        VmInclude:__COMPONENT__/f/form.01.css
+        #form_container__ID{
+            max-width:1200px;
+        }
+    </style>
+</div>

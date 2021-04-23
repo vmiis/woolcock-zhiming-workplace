@@ -51,25 +51,20 @@
                                 var columns=records[I].Data.Columns;
                                 path=path.replace(/ /g,'%20');
                                 path=path.replace(/\n/g,'').replace(/\r/g,'');
-                                if(path.indexOf("$top=")==-1 && path.indexOf("$count=true")!=-1 ) $vm.show_module('microsoft-data',{name:name,path:path,array:array,columns:columns})
-                                else{
-                                    $vm.request({cmd:'microsoft-api',access_token:t,host:host,path:path},function(res){
-                                        var v=res.result;
-                                        if(res.status=="err"){
-                                            $vm.show_module('jsonv',{json_data:v})
-                                        }
-                                        if(array!=""){
-                                            var type=columns.indexOf('|');
-                                            if(type!=-1){
-                                                $vm.show_module('gridv',{name:name,json_data:JSON.parse(v),array:array,columns:columns})
-                                            }
-                                            else $vm.show_module('arrayv',{name:name,json_data:JSON.parse(v),array:array,columns:columns})
-                                        }
-                                        else{
-                                            $vm.show_module('jsonv',{json_data:JSON.parse(v)})
-                                        }
-                                    })
-                                }
+                                $vm.request({cmd:'microsoft-api',access_token:t,host:host,path:path},function(res){
+                                    var v=res.result;
+                                    if(res.status=="err"){
+                                        $vm.show_module('jsonv',{json_data:v})
+                                    }
+                                    else if(array!=""){
+                                        var type=columns.indexOf('|');
+                                        if(type!=-1) $vm.show_module('gridv',{name:name,json_data:JSON.parse(v),array:array,columns:columns})
+                                        else $vm.show_module('arrayv',{name:name,json_data:JSON.parse(v),array:array,columns:columns})
+                                    }
+                                    else{
+                                        $vm.show_module('jsonv',{json_data:JSON.parse(v)})
+                                    }
+                                })
                             }
                         })
                         break;
@@ -82,17 +77,14 @@
                     var path=$('#path__ID').val();
                     path=path.replace(/ /g,'%20');
                     path=path.replace(/\n/g,'').replace(/\r/g,'');
-                    if(path.indexOf("$top=")==-1 && path.indexOf("$count=true")!=-1 ) $vm.show_module('microsoft-data',{name:name,path:path,array:array,columns:columns})
-                    else{
-                        $vm.request({cmd:'microsoft-api',access_token:t,host:host,path:path},function(res){
-                            var v=res.result;
-                            try {
-                                $vm.show_module('jsonv',{json_data:JSON.parse(v)})
-                            } catch (e) {
-                                $vm.show_module('jsonv',{json_data:v})
-                            }
-                        })
-                    }
+                    $vm.request({cmd:'microsoft-api',access_token:t,host:host,path:path},function(res){
+                        var v=res.result;
+                        try {
+                            $vm.show_module('jsonv',{json_data:JSON.parse(v)})
+                        } catch (e) {
+                            $vm.show_module('jsonv',{json_data:v})
+                        }
+                    })
                 }
             })
             //-------------------------------------

@@ -20,6 +20,8 @@
                 <li><a href='?/clinics'>Clinics</a></li>
                 <li><a href='?/referrers'>Referrers</a></li>
                 <li><a href='?/referrals'>Referrals</a></li>
+                <li><a href='?/api_mongodb_2'>Referrers since 2020-10-23</a></li>
+                <li><a href='?/api_mongodb_1'>Top 100 Referrers</a></li>
                 <li><a href='?/coreplus-datatable-relationships'>Coreplus datatable relationships</a></li>
                 <li><a href='?/coreplus-referral-diagram'>Referral data example</a></li>
             <span class=LT__ID>Dynamics CRM</span>
@@ -28,12 +30,16 @@
                 <li><a href='?/crm-project-data'>Projects</a></li>
                 <li><a href='?/crm-study-data'>Studies</a></li>
                 -->
-                <li><a href='?/api_dynamics_5'>Latest 200 volunteers</a></li>
+                <li><a href='?/api_dynamics_5'>Volunteers</a></li>
                 <li><a href='?/api_dynamics_4'>Latest 200 stuties</a></li>
                 <li><a href='?/api_dynamics_2'>Latest 200 projects</a></li>
                 <li><a href='?/api_dynamics_3'>Total number of volunteers, projects and studies</a></li>
                 <li><a href='?/api_dynamics_6'>Search volunteers by name</a></li>
                 <li><a href='?/api_dynamics_1'>Search projects</a></li>
+                <li><a href='?/api_dynamics_7'>Search studies</a></li>
+                <li><a href='?/api_dynamics_8'>Query for Sinthia<br><span style='font-size:11px; font-weight:normal; color:#555'>(Age>40, with COPD or Eemphysema or Chronic Bronchitis)</span></a></li>
+                <li><a href='?/api_dynamics_9'>Optimising Maintenance Therapy<br><span style='font-size:11px; font-weight:normal; color:#555'>(Age>=40, with COPD or Eemphysema or Chronic Bronchitis or Healthy and NO Lung Cancer)</span></a></li>
+                	
             <span class=LT__ID>Mailchimp Marketing</span>
                 <li><a href='?/api_mailchimp_1'>Woolcock campaign list</a></li>
                 <li><a href='?/api_mailchimp_2'>Search audience</a></li>
@@ -92,6 +98,7 @@
                 <li><a href='?/blackbaud-api-data'>Blackbaud API Request</a></li>
                 <li><a href='?/intuit-api-data'>Intuit API Request</a></li>
                 <li><a href='?/microsoft-api-data'>Microsoft API Request</a></li>
+                <li><a href='?/mongodb-api-data'>MongoDB API Request</a></li>
 
 
     </div>
@@ -145,6 +152,7 @@
                         switch(aa[1]){
                             case "dynamics":  dynamics_365_query(parseInt(aa[2])); break;
                             case "mailchimp": mailchimp_query(parseInt(aa[2])); break;
+                            case "mongodb": mongodb_query(parseInt(aa[2])); break;
                         }
                     }
                 }
@@ -153,6 +161,7 @@
             //--------------------------------------------------------
 			//VmInclude:__CURRENT_PATH__main-panel-dynamics_365.js
 			//VmInclude:__CURRENT_PATH__main-panel-mailchimp.js
+			//VmInclude:__CURRENT_PATH__main-panel-mongodb.js
             //--------------------------------------------------------
             
         }
